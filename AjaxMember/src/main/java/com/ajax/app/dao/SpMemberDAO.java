@@ -41,6 +41,9 @@ public class SpMemberDAO {
 	@Value("INSERT INTO spajax VALUES (NULL, ?, ?, ?)")
 	private String insertMember; // 회원가입 쿼리문
 	
+	@Value("select * from spajax where id = ? and pw = ?")
+	private String loginData;
+	
 	// SELECT 목록 가져오기 (페이징 포함)
 	public List<SpMemberDTO> getAllMember() {
 		return jdbcTmp.query(selectAllMember, new MemberMapper());
@@ -98,6 +101,11 @@ public class SpMemberDAO {
 
 	public int getSearchCount(String name) {
 		return jdbcTmp.queryForObject(selectSearchCntMember, Integer.class, "%" + name + "%");
+	}
+	
+	// 로그인
+	public SpMemberDTO loginInfo(String id, String pw) {
+		return jdbcTmp.queryForObject(loginData, new MemberMapper(), id, pw);
 	}
 	
 	// select를 위한 RowMapper를 만드는 inner class

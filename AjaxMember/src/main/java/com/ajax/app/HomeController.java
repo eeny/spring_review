@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -143,9 +145,7 @@ public class HomeController {
 		실행된 결과를 jsp로 돌려준다.
 	*/
 	
-	
-	
-	
+
 	// ================= 게시판 만들기 (만들다 말았음) ===================
 	@RequestMapping("/BoardList.do")
 	public String listBoard() { // 게시글목록 불러오기
@@ -159,4 +159,30 @@ public class HomeController {
 		return "binsert";
 	}
 	
-}
+	// =============== 로그인 / 로그아웃 ===============
+	@RequestMapping("/Login.do")
+	public String login(String id, String pw, HttpSession session) { // SpMemberDTO dto 이렇게 받아도 되고 각각 받아도 되고~
+		SpMemberDTO dto = null;
+		try {
+			dto = dao.loginInfo(id, pw);
+			
+		} catch (EmptyResultDataAccessException e) {
+			
+		} finally {
+			if (dto != null) { // id, pw가 맞는 경우
+				session.setAttribute("userInfo", dto);
+			}
+			// id, pw가 틀리면 그냥 dto는 null이 된다!
+		}
+		
+		return "main";
+	}
+	
+	@RequestMapping("/Logout.do")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		
+		return "main";
+	}
+	
+}// Controller 끝
