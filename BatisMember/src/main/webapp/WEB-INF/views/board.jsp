@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>±Û ÀĞ±â</title>
+<meta charset="UTF-8">
+<title>ê¸€ ì½ê¸°</title>
 <style type="text/css">
 	table {
 		border: 1px solid black;
@@ -16,38 +16,42 @@
 	td {
 		border: 1px solid black;
 	}
+	img {
+		width: 300px;
+		height: 300px;
+	}
 </style>
 </head>
 <body>
 	<table>
 		<tr>
-			<td>¾ÆÀÌµğ</td><td>${bdata.id }</td>
+			<td>ì•„ì´ë””</td><td>${bdata.id }</td>
 		</tr>
 		<tr>
-			<td>ÀÌ¸§</td><td>${bdata.name }</td>
+			<td>ì´ë¦„</td><td>${bdata.name }</td>
 		</tr>
 		<tr>
-			<td>Á¦¸ñ</td><td>${bdata.title }</td>
+			<td>ì œëª©</td><td>${bdata.title }</td>
 		</tr>
 		<tr>
-			<td>ÀÛ¼ºÀÏ</td><td>${bdata.regdate }</td>
+			<td>ì‘ì„±ì¼</td><td>${bdata.regdate }</td>
 		</tr>
 		<tr>
-			<td>Á¶È¸¼ö</td><td>${bdata.hit }</td>
+			<td>ì¡°íšŒìˆ˜</td><td>${bdata.hit }</td>
 		</tr>
 		<tr>
-			<td>³»¿ë</td><td>${bdata.content }</td>
+			<td>ë‚´ìš©</td><td>${bdata.content }</td>
 		</tr>
 		<tr>
-			<td>ÆÄÀÏ(ÀÌ¹ÌÁö)</td><td>${bdata.img }</td>
+			<td>íŒŒì¼(ì´ë¯¸ì§€)</td><td><img src="resources/upload/${bdata.img }"></td>
 		</tr>
 	</table>
 	<br>
 	<c:if test="${userInfo.id eq bdata.id }">
-		<input type="button" value="±Û¼öÁ¤" onclick="location.href='ModifyBoard.do?idx=${bdata.idx}'">
-		<input type="button" value="±Û»èÁ¦" onclick="location.href='DeleteBoard.do?idx=${bdata.idx}'">
+		<input type="button" value="ê¸€ìˆ˜ì •" onclick="location.href='ModifyBoard.do?idx=${bdata.idx}'">
+		<input type="button" value="ê¸€ì‚­ì œ" onclick="location.href='DeleteBoard.do?idx=${bdata.idx}'">
 	</c:if>
 	<br><br>
-	<input type="button" value="¸ŞÀÎÀ¸·Î" onclick="location.href='main.do'">
+	<input type="button" value="ë©”ì¸ìœ¼ë¡œ" onclick="location.href='main.do'">
 </body>
 </html>

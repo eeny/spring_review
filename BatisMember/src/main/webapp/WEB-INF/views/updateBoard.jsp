@@ -23,7 +23,7 @@
 </head>
 <body>
 	<h3>글수정</h3>
-	<form action="UpdateBoard.do" method="post">
+	<form action="UpdateBoard.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="idx" value="${bdata.idx }">
 		<table>
 			<tr>

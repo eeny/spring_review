@@ -23,7 +23,7 @@
 </head>
 <body>
 	<h3>새글쓰기</h3>
-	<form action="BoardInsert.do" method="post">
+	<form action="BoardInsert.do" method="post" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<td>아이디</td><td><input type="text" name="id" value="${userInfo.id }" readonly></td>
