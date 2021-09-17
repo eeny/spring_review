@@ -162,6 +162,7 @@ public class HomeController {
 	// =============== 로그인 / 로그아웃 ===============
 	@RequestMapping("/Login.do")
 	public String login(String id, String pw, HttpSession session) { // SpMemberDTO dto 이렇게 받아도 되고 각각 받아도 되고~
+		/*
 		SpMemberDTO dto = null;
 		try {
 			dto = dao.loginInfo(id, pw);
@@ -174,7 +175,9 @@ public class HomeController {
 			}
 			// id, pw가 틀리면 그냥 dto는 null이 된다!
 		}
-		
+		*/
+		SpMemberDTO dto = dao.loginInfo(id, pw);
+		session.setAttribute("userInfo", dto);
 		return "main";
 	}
 	

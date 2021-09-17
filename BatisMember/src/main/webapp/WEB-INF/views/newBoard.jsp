@@ -26,10 +26,10 @@
 	<form action="BoardInsert.do" method="post">
 		<table>
 			<tr>
-				<td>아이디</td><td><input type="text" name="id" required></td>
+				<td>아이디</td><td><input type="text" name="id" value="${userInfo.id }" readonly></td>
 			</tr>
 			<tr>
-				<td>이름</td><td><input type="text" name="name" required></td>
+				<td>이름</td><td><input type="text" name="name" value="${userInfo.name }" readonly></td>
 			</tr>
 			<tr>
 				<td>제목</td><td><input type="text" name="title" required></td>

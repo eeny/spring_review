@@ -26,20 +26,27 @@
 </head>
 <body>
 	<h3>로그인</h3>
-	<form action="Login.do" method="post">
-		<table>
-			<tr>
-				<td class="dark">아이디</td><td><input type="text" name="id" required></td>
-			</tr>
-			<tr>
-				<td class="dark">비밀번호</td><td><input type="password" name="pw" required></td>
-			</tr>
-		</table>
+	<c:if test="${userInfo eq null }">
+		<form action="Login.do" method="post">
+			<table>
+				<tr>
+					<td class="dark">아이디</td><td><input type="text" name="id" required></td>
+				</tr>
+				<tr>
+					<td class="dark">비밀번호</td><td><input type="password" name="pw" required></td>
+				</tr>
+			</table>
+			<br>
+			<input type="submit" value="로그인"> 
+		</form>	
 		<br>
-		<input type="submit" value="로그인"> 
 		<input type="button" value="회원가입하기" onclick="location.href='Regist.do'">
 		<input type="button" value="회원목록" onclick="location.href='AllMembers.do'">
-	</form>	
+	</c:if>
+	<c:if test="${userInfo ne null }">
+		<b>${userInfo.name }</b>님 접속중... <br>
+		<input type="button" value="로그아웃" onclick="location.href='Logout.do'">
+	</c:if>
 	
 	<h3>게시판</h3>
 	<p>총 ${totalCount }개의 게시물이 있습니다.</p>
@@ -60,6 +67,8 @@
 	
 	
 	<br>
-	<input type="button" value="글작성" onclick="location.href='WriteBoard.do'">
+	<c:if test="${userInfo.name ne null }">
+		<input type="button" value="글작성" onclick="location.href='WriteBoard.do'">
+	</c:if>
 </body>
 </html>

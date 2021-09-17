@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -103,9 +104,15 @@ public class SpMemberDAO {
 		return jdbcTmp.queryForObject(selectSearchCntMember, Integer.class, "%" + name + "%");
 	}
 	
-	// 로그인
+	// 로그인 - 여기서 try-catch로 처리하는 것은 별로 좋은 방법은 아니다!
+	// 데이터가 만에 하나라도 1개가 아닐 수 있다면
+	// queryForObject 대신에 query를 사용하는 것이 좋다!
 	public SpMemberDTO loginInfo(String id, String pw) {
-		return jdbcTmp.queryForObject(loginData, new MemberMapper(), id, pw);
+		try {
+			return jdbcTmp.queryForObject(loginData, new MemberMapper(), id, pw);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}	
 	}
 	
 	// select를 위한 RowMapper를 만드는 inner class

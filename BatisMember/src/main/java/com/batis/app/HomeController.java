@@ -1,6 +1,9 @@
 package com.batis.app;
 
 import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +44,20 @@ public class HomeController {
 	}
 	
 	@RequestMapping("/Login.do")
-	public String login() { // 로그인 처리
+	public String login(BatisMemberDTO dto, HttpSession session) { // 로그인 처리
+		List<BatisMemberDTO> list = mdao.login(dto);
+		if (list.size() < 1) { // 로그인이 안된 경우
+			list = null;
+		} else {
+			session.setAttribute("userInfo", list.get(0));
+		}
+		
+		return "redirect:/main.do";
+	}
+	
+	@RequestMapping("/Logout.do")
+	public String logout(HttpSession session) { // 로그아웃 처리
+		session.invalidate();
 		
 		return "redirect:/main.do";
 	}

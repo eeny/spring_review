@@ -43,8 +43,10 @@
 		</tr>
 	</table>
 	<br>
-	<input type="button" value="글수정" onclick="location.href='ModifyBoard.do?idx=${bdata.idx}'">
-	<input type="button" value="글삭제" onclick="location.href='DeleteBoard.do?idx=${bdata.idx}'">
+	<c:if test="${userInfo.id eq bdata.id }">
+		<input type="button" value="글수정" onclick="location.href='ModifyBoard.do?idx=${bdata.idx}'">
+		<input type="button" value="글삭제" onclick="location.href='DeleteBoard.do?idx=${bdata.idx}'">
+	</c:if>
 	<br><br>
 	<input type="button" value="메인으로" onclick="location.href='main.do'">
 </body>

@@ -28,6 +28,9 @@ public class BatisMemberDAO { // 회원 관련
 	@Value("SELECT * FROM batismember")
 	private String getAllMember; // 회원 목록
 	
+	@Value("SELECT * FROM batismember WHERE id = ? AND pw = ?")
+	private String login; // 로그인
+	
 	// ========== SQL 실행 메서드 ==========
 	
 	public int insertMember(BatisMemberDTO dto) { // 회원가입
@@ -47,6 +50,10 @@ public class BatisMemberDAO { // 회원 관련
 	
 	public List<BatisMemberDTO> getAllMember() { // 회원 목록 가져오기
 		return jdbcTmp.query(getAllMember, new MemberMapper());
+	}
+	
+	public List<BatisMemberDTO> login(BatisMemberDTO dto) { // 로그인
+		return jdbcTmp.query(login, new MemberMapper(), dto.getId(), dto.getPw());
 	}
 	
 	
