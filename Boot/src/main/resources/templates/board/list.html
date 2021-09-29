@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+	리스트
+	<br>
+	<div th:each="dto:${data}">
+		<a th:href="@{delete.do(idx=${dto.idx})}">
+		<span th:text="${dto.idx}"></span>
+		</a>/ 
+		<span th:text="${dto.name}"></span>/ 
+		<span th:text="${dto.title}"></span>
+	</div>
+	<a href="write.do">글쓰기</a>
+</body>
+</html>

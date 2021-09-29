@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BootMapper">
+	<insert id="insertData">
+		insert into bootboard values (null, #{name}, #{title})
+	</insert>
+	<update id="updateData">
+		update bootboard set name=${name}, title=${title} where idx=#{idx}
+	</update>
+	<delete id="deleteData">
+		delete from bootboard where idx=#{idx}
+	</delete>
+	<select id="selectOne" resultType="com.example.demo.dto.BootDTO">
+		select * from bootboard where idx=#{idx}
+	</select>
+	<select id="selectAll" resultType="com.example.demo.dto.BootDTO">
+		select * from bootboard
+	</select>
+	<select id="selectCnt" resultType="Integer">
+		select count(idx) from bootboard
+	</select>
+</mapper>
