@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="office">
+
+	<!-- 직원목록 -->
+	<select id="employeeSelectDate" resultType="com.pluckit.app.dto.EmployeeDTO">
+		select emp_num
+			, emp_name
+			, emp_tel
+			, emp_email
+			, dept_id
+			, rank_id
+		from employee
+	</select>
+	
+	<select id="employeeSelectOneData" resultType="com.pluckit.app.dto.EmployeeDTO" parameterType="HashMap">
+    	select emp_num
+			, emp_name
+			, emp_tel
+			, emp_email
+			, dept_id
+			, rank_id
+			from employee
+			WHERE ${select} LIKE CONCAT('%', #{search}, '%')
+		
+	</select>
+
+</mapper>

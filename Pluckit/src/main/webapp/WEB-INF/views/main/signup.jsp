@@ -9,24 +9,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
-    <link rel="stylesheet" href="resources/css/signup.css">
+    <!-- CSS 파일 -->
+    <link rel="stylesheet" href="resources/css/signup.css"> 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<!-- Datepicker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <div id="wrap">
         <div class="signupBox">
             <form action="SignupProc.do" method="post" name="signupForm">
                 <p>Sign Up</p>
-
-                <!-- 유효성 검사 div -->
-                <div class="alert"><i class="fas fa-exclamation-circle"></i>&nbsp;&nbsp;사용자 정보가 올바르지 않습니다.</div>
-                
                 <!-- 정보 입력 table -->
                 <table>
                     <tr>
@@ -58,33 +63,28 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>입사일</th>
-                        <td>
-                            <input type="date" name="emp_hire" id="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>사원번호</th>
-                        <td>
-                            <input type="text" name="emp_id" id="">
+                        <th>생년월일</th>
+                        <td class="birthTd">
+                            <input type="text" name="emp_birth" id="datepicker" placeholder="YYYY-MM-DD" readonly="readonly">
+                            <i class="far fa-calendar-alt"></i>
                         </td>
                     </tr>
                     <tr>
                         <th>사원명</th>
                         <td>
-                            <input type="text" name="emp_name" id="">
+                            <input type="text" name="emp_name" id="empName">
                         </td>
                     </tr>
                     <tr>
                         <th>비밀번호</th>
                         <td>
-                            <input type="password" name="emp_pw" id="">
+                            <input type="password" name="emp_pw" id="empPw" placeholder="영문대소문자/숫자/특수문자 포함, 8자 이상">
                         </td>
                     </tr>
                     <tr>
                         <th>비밀번호 확인</th>
                         <td>
-                            <input type="password" id="">
+                            <input type="password" id="empPwChk">
                         </td>
                     </tr>
                 </table>
@@ -97,8 +97,71 @@
     </div>
     
     <script type="text/javascript">
+    	// toastr 설정
+    	toastr.options = {
+		  "closeButton": false,
+		  "debug": false,
+		  "newestOnTop": false,
+		  "progressBar": false,
+		  "positionClass": "toast-top-right",
+		  "preventDuplicates": false,
+		  "onclick": null,
+		  "showDuration": "300",
+		  "hideDuration": "1000",
+		  "timeOut": "5000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut"
+		}
+    	
+    	// Datepicker 설정	
+    	$(function() {
+    		$.datepicker.setDefaults({
+                dateFormat: 'yy-mm-dd'
+                , showOtherMonths: true 
+                , showMonthAfterYear: true 
+                , changeYear: true 
+                , changeMonth: true              
+                , yearSuffix: "년"
+                , yearRange: "1920:2030"
+                , monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                , monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] 
+                , dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'] 
+                , dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'] 
+            });
+            
+            // 생년월일 input을 datepicker로 선언
+	    	$("#datepicker").datepicker();
+        });
+    
+    	// 회원가입폼 유효성 검사 후 submit
     	function signup() {
 			var signupForm = document.signupForm;
+			
+			var dept = document.getElementById("dept").value;
+			var rank = document.getElementById("rank").value;
+			var birth = document.getElementById("datepicker").value;
+			var empName = document.getElementById("empName").value;
+			var empPw = document.getElementById("empPw").value;
+			var empPwChk = document.getElementById("empPwChk").value;
+			
+			var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+			
+			if (birth.length <= 0 ) {
+				toastr.warning("생년월일을 입력해주세요");
+                return false;
+			} else if (empName.trim().length <= 0 || empName.search(/\s/) !== -1) {
+				toastr.warning("이름을 입력해주세요");
+                return false;			
+			} else if (reg.test(empPw) === false) {
+				toastr.warning("비밀번호는 영문대소문자/숫자/특수문자포함 8자리이상입니다");
+                return false;											
+			} else if (empPwChk != empPw) {
+                toastr.warning("비밀번호가 일치하지 않습니다");	
+                return false;	
+            }
 			
 			signupForm.submit();
 		}

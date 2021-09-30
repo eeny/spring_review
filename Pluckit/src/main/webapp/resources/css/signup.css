@@ -45,22 +45,6 @@ p {
 	margin-bottom: 20px;
 }
 
-/* 유효성 검사시 뜨는 메세지창 */
-div.alert {
-	width: 90%;
-	height: 44px;
-	margin: 0 auto;
-	background-color: #333333;
-	text-align: center;
-	line-height: 44px;
-	color: white;
-	/* display: none; */
-}
-
-.alert i {
-	color: tomato;
-}
-
 /* select, input태그들을 감싸는 table */
 table {
 	width: 90%;
@@ -118,4 +102,23 @@ input.submit:hover {
 .login a {
 	color: #0073c0;
 	font-weight: bolder;
+}
+
+/* Datepicker 모양 */
+.hasDatepicker {
+	cursor: pointer;
+}
+
+/* 달력 아이콘 */
+.birthTd {
+	position: relative;
+}
+
+.fa-calendar-alt {
+	color: #333333;
+	font-size: 25px;
+	position: absolute;
+	display: inline-block;
+	right: 10px;
+	top: 9px;
 }

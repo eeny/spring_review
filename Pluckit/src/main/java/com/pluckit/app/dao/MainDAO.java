@@ -13,6 +13,10 @@ public class MainDAO {
 	
 	// 회원가입 처리
 	public int insertSignupData(EmployeeDTO dto) {
-		return sqlSession.insert("com.pluckit.mappers.main.insertSignupData", dto);
+		return sqlSession.insert("main.insertSignupData", dto);
 	}
-}
+	
+	
+	
+	
+}// MainDAO 끝

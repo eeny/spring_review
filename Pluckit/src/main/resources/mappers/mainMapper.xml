@@ -2,24 +2,27 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pluckit.mappers.main">
+<mapper namespace="main">
 	<!-- 회원가입 -->
 	<insert id="insertSignupData" parameterType="com.pluckit.app.dto.EmployeeDTO">
-		insert into employee (
-			dept_id, 
+		<selectKey keyProperty="eid" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(emp_id)+1, 1) FROM employee
+		</selectKey>
+		INSERT INTO employee (
+			emp_num, 
+			dept_id,
 			rank_id, 
 			emp_birth, 
-			emp_id, 
 			emp_name, 
 			emp_pw, 
 			emp_hire, 
 			emp_auth
 		
-		) values (
+		) VALUES ( 
+			CONCAT(#{emp_num}, LPAD(#{eid}, 3, 0)),
 			#{dept_id}, 
 			#{rank_id}, 
 			#{emp_birth}, 
-			#{emp_id}, 
 			#{emp_name}, 
 			#{emp_pw}, 
 			now(), 

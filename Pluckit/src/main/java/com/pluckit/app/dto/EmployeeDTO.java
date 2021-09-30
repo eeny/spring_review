@@ -1,7 +1,8 @@
 package com.pluckit.app.dto;
 
 public class EmployeeDTO {
-	private int emp_id; // 사원번호
+	private int emp_id; // 직원코드
+	private String emp_num; // 사원번호
 	private String emp_pw; // 비밀번호
 	private String emp_name; // 이름
 	private String emp_ename; // 영문이름
@@ -20,12 +21,19 @@ public class EmployeeDTO {
 	private String emp_quit; // 퇴사일자 (재직상태-퇴사랑 같이 update할 것)
 	private String emp_photo; // 증명사진
 	private int emp_auth; // 0(권한없음), 1(사원), 2(부서장), 3(임원), 4(협력업체), 5(관리자)
+	private int eid; // 사원번호 중복피하기위한 변수 - 회원가입 할 때 사용
 	
 	public int getEmp_id() {
 		return emp_id;
 	}
 	public void setEmp_id(int emp_id) {
 		this.emp_id = emp_id;
+	}
+	public String getEmp_num() {
+		return emp_num;
+	}
+	public void setEmp_num(String emp_num) {
+		this.emp_num = emp_num;
 	}
 	public String getEmp_pw() {
 		return emp_pw;
@@ -134,5 +142,11 @@ public class EmployeeDTO {
 	}
 	public void setEmp_auth(int emp_auth) {
 		this.emp_auth = emp_auth;
+	}
+	public int getEid() {
+		return eid;
+	}
+	public void setEid(int eid) {
+		this.eid = eid;
 	}
 }

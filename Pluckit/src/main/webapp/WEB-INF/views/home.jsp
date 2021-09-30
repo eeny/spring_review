@@ -15,5 +15,8 @@
 	메인홈페이지
 	<br>
 	<a href="Login.do">로그인</a>
+	<br><br><br>
+	
+	<a href="Employee.do">직원목록</a>
 </body>
 </html>
