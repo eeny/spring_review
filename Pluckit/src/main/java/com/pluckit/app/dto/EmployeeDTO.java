@@ -21,7 +21,11 @@ public class EmployeeDTO {
 	private String emp_quit; // 퇴사일자 (재직상태-퇴사랑 같이 update할 것)
 	private String emp_photo; // 증명사진
 	private int emp_auth; // 0(권한없음), 1(사원), 2(부서장), 3(임원), 4(협력업체), 5(관리자)
+	
+	// 실제 테이블에 존재하지 않는 변수들
 	private int eid; // 사원번호 중복피하기위한 변수 - 회원가입 할 때 사용
+	private String deptName; // 부서명 변수 - 로그인 할 때 사용
+	private String rankName; // 직급명 변수 - 로그인 할 때 사용
 	
 	public int getEmp_id() {
 		return emp_id;
@@ -148,5 +152,17 @@ public class EmployeeDTO {
 	}
 	public void setEid(int eid) {
 		this.eid = eid;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+	public String getRankName() {
+		return rankName;
+	}
+	public void setRankName(String rankName) {
+		this.rankName = rankName;
 	}
 }

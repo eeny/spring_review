@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pluckit.app.dao.MainDAO;
+import com.pluckit.app.dto.DepartmentDTO;
 import com.pluckit.app.dto.EmployeeDTO;
 
 @Service
@@ -27,6 +28,10 @@ public class MainService {
 		dto.setEmp_num(empNum);
 		
 		mdao.insertSignupData(dto);
+	}
+
+	public EmployeeDTO selectLoginData(EmployeeDTO dto) {
+		return mdao.selectLoginData(dto);
 	}
 	
 	
