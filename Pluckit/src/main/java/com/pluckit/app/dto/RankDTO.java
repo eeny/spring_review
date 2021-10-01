@@ -1,13 +1,13 @@
 package com.pluckit.app.dto;
 
 public class RankDTO {
-	private int rank_id;
+	private String rank_id;
 	private String rank_name;
 	
-	public int getRank_id() {
+	public String getRank_id() {
 		return rank_id;
 	}
-	public void setRank_id(int rank_id) {
+	public void setRank_id(String rank_id) {
 		this.rank_id = rank_id;
 	}
 	public String getRank_name() {

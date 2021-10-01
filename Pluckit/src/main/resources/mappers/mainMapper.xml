@@ -56,10 +56,4 @@
 		AND 
 			emp_pw = #{emp_pw}
 	</select>
-	
-	
-	
-	
-	
-	
 </mapper>

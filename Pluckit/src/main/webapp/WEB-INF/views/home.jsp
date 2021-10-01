@@ -14,7 +14,14 @@
 	<br>
 	메인홈페이지
 	<br>
-	<a href="Login.do">로그인</a>
+	<c:if test="${empInfo eq null }">
+		<a href="Login.do">그룹웨어 로그인하기</a>
+	</c:if>
+	<c:if test="${empInfo ne null }">
+		<a href="GroupWareMain.do">그룹웨어 메인으로</a>
+		<br><br>
+		<a href="LogoutProc.do">로그아웃</a>
+	</c:if>
 	<br><br><br>
 	
 	<a href="Employee.do">직원목록</a>

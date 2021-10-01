@@ -21,8 +21,8 @@ public class MainService {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(fmt);
-		int deptId = dto.getDept_id();
-		int rankId = dto.getRank_id();
+		String deptId = dto.getDept_id();
+		String rankId = dto.getRank_id();
 		
 		String empNum = year + deptId + rankId;
 		dto.setEmp_num(empNum);

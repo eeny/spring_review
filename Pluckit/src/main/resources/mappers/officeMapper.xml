@@ -6,24 +6,45 @@
 
 	<!-- 직원목록 -->
 	<select id="employeeSelectDate" resultType="com.pluckit.app.dto.EmployeeDTO">
-		select emp_num
-			, emp_name
-			, emp_tel
-			, emp_email
-			, dept_id
-			, rank_id
-		from employee
+		SELECT 
+			e.emp_num, 
+			e.emp_name, 
+			e.emp_tel, 
+			e.emp_email, 
+			d.dept_name AS deptName, 
+			r.rank_name AS rankName
+		FROM 
+			employee AS e
+		LEFT JOIN 
+			department AS d
+		ON 
+			e.dept_id = d.dept_id
+		LEFT JOIN 
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
 	</select>
 	
 	<select id="employeeSelectOneData" resultType="com.pluckit.app.dto.EmployeeDTO" parameterType="HashMap">
-    	select emp_num
-			, emp_name
-			, emp_tel
-			, emp_email
-			, dept_id
-			, rank_id
-			from employee
-			WHERE ${select} LIKE CONCAT('%', #{search}, '%')
+    	SELECT 
+			e.emp_num, 
+			e.emp_name, 
+			e.emp_tel, 
+			e.emp_email, 
+			d.dept_name AS deptName, 
+			r.rank_name AS rankName
+		FROM 
+			employee AS e
+		LEFT JOIN 
+			department AS d
+		ON 
+			e.dept_id = d.dept_id
+		LEFT JOIN 
+			rank AS r
+		ON 
+			e.rank_id = r.rank_id
+		WHERE 
+			e.${select} LIKE CONCAT('%', #{search}, '%')
 		
 	</select>
 

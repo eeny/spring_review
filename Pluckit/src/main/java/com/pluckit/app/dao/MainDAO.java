@@ -22,7 +22,4 @@ public class MainDAO {
 		return sqlSession.selectOne("main.selectLoginData", dto);
 	}
 	
-	
-	
-	
 }// MainDAO 끝

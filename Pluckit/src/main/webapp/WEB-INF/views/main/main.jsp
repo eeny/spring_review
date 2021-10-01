@@ -35,17 +35,20 @@
         <nav> <!--사이드 바(gnbmenu) 시작-->
             <div class="gnb-align">
                 <div class="logo">
-                    <a href="#"><img src="resources/img/logo_transparent.png" alt="사이드바_로고"></a>
+                    <a href="GroupWareMain.do"><img src="resources/img/logo_transparent.png" alt="사이드바_로고"></a>
                 </div>
                 <ul class="gnb-menu">
                     <li><a href="board_payment_spend.html"><i class="far fa-edit"></i> 전자결재</a></li>
                     <li><a href="#"><i class="fas fa-cloud-download-alt"></i> 업무공유</a></li>
                     <li><a href="board_notice.html"><i class="fas fa-table"></i> 게시판</a></li>
-                    <li><a href="#"><i class="far fa-building"></i> 오피스</a></li>
+                    <li><a href="Employee.do"><i class="far fa-building"></i> 오피스</a></li>
                     <li><a href="#"><i class="far fa-id-badge"></i> 근태관리</a></li>
                     <li><a href="#"><i class="fas fa-tasks"></i> 설문</a></li>
                     <li><a href="#"><i class="far fa-calendar-alt"></i> 일정관리</a></li>
+                    <!-- <li><a href="#"><i class="fas fa-cogs"></i> 관리자메뉴</a></li> -->
+                    <c:if test="${empInfo.emp_auth eq 5 }">
                     <li><a href="#"><i class="fas fa-cogs"></i> 관리자메뉴</a></li>
+                    </c:if>
                 </ul>
             </div>
         </nav> <!--사이드 바(gnbmenu) 끝-->
@@ -64,7 +67,7 @@
                         </form>
                     </div>
                     <i class="fas fa-bullhorn"></i>
-                    <i class="fas fa-home"></i>
+                    <i class="fas fa-home" onclick="location.href='Home.do'"></i>
                     <i class="fas fa-power-off" onclick="Confirm('로그아웃 하시겠습니까?')"></i>
                 </div>
             </div> <!--상단 메뉴 끝-->

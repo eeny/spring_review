@@ -31,7 +31,7 @@ public class HomeController {
 		return "home";
 	}
 	
-	// ===================== 로그인 & 회원가입 & 내정보 시작 =====================
+	// ===================== 로그인 & 회원가입 시작 =====================
 
 	// 로그인 페이지로 이동
 	@RequestMapping("/Login.do")
@@ -62,8 +62,14 @@ public class HomeController {
 			} 
 			
 			session.setAttribute("empInfo", empInfo);
-			return "main/main";
+			return "home";
 		}		
+	}
+	
+	// 그룹웨어 메인 페이지로 이동
+	@RequestMapping("/GroupWareMain.do")
+	public String groupWareMain() {
+		return "main/main";
 	}
 	
 	// 로그아웃 처리
@@ -71,7 +77,7 @@ public class HomeController {
 	public String logoutProc(HttpSession session) {
 		session.invalidate();
 		
-		return "redirect:/Login.do";
+		return "redirect:/Home.do";
 	}
 	
 	// 회원가입 페이지로 이동
@@ -88,7 +94,7 @@ public class HomeController {
 		return "redirect:/Login.do";
 	}
 	
-	// ===================== 로그인 & 회원가입 & 내정보 끝 =====================
+	// ===================== 로그인 & 회원가입 끝 =====================
 	
 	// ===================== 오피스:직원목록 시작 =====================
 	
@@ -103,6 +109,33 @@ public class HomeController {
 	@RequestMapping("/SerchProc.do")
 	public String serchEmployeeList(Model model, String select, String search) {
 		HashMap<String, String> map = new HashMap<String, String>();
+		
+		// 검색시 부서코드와 직급코드는 따로 구분해서 검색어 변경
+		if (select.equals("dept_id")) {
+			switch (search) {
+				case "인사": search = "100"; break;
+				case "영업": search = "200"; break;
+				case "마케팅": search = "300"; break;
+				case "총무회계": search = "400"; break;
+				case "기술지원": search = "500"; break;
+				case "전략기획": search = "600"; break;
+				default: search = "";	break;
+			}
+		}
+		if (select.equals("rank_id")) {
+			switch (search) {
+				case "사원": search = "1"; break;
+				case "대리": search = "2"; break;
+				case "과장": search = "3"; break;
+				case "차장": search = "4"; break;
+				case "부장": search = "5"; break;
+				case "이사": search = "6"; break;
+				case "전무": search = "7"; break;
+				case "사장": search = "8"; break;
+				default: search = "";	break;
+			}
+		}
+		
 		map.put("select", select);
 		map.put("search", search);
 		model.addAttribute("employeeList", osvc.selectEmployeeListOne(map));

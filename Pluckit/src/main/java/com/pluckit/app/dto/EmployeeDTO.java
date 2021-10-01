@@ -14,8 +14,8 @@ public class EmployeeDTO {
 	private String emp_addr; // 주소2(주소)
 	private String emp_detailaddr; // 주소3(상세주소)
 	private String emp_extraaddr; // 주소4(참고항목)
-	private int dept_id; // 부서 코드
-	private int rank_id; // 직급 코드
+	private String dept_id; // 부서 코드
+	private String rank_id; // 직급 코드
 	private String emp_status; // 재직, 휴직, 퇴사
 	private String emp_hire; // 입사일자
 	private String emp_quit; // 퇴사일자 (재직상태-퇴사랑 같이 update할 것)
@@ -105,16 +105,16 @@ public class EmployeeDTO {
 	public void setEmp_extraaddr(String emp_extraaddr) {
 		this.emp_extraaddr = emp_extraaddr;
 	}
-	public int getDept_id() {
+	public String getDept_id() {
 		return dept_id;
 	}
-	public void setDept_id(int dept_id) {
+	public void setDept_id(String dept_id) {
 		this.dept_id = dept_id;
 	}
-	public int getRank_id() {
+	public String getRank_id() {
 		return rank_id;
 	}
-	public void setRank_id(int rank_id) {
+	public void setRank_id(String rank_id) {
 		this.rank_id = rank_id;
 	}
 	public String getEmp_status() {
