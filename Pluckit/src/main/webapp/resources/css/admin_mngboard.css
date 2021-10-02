@@ -291,6 +291,10 @@ table.makeBoardTable {
 	text-align: center;
 }
 
+input#b_writer {
+	text-align: center;
+}
+
 /********************** 게시판 목록 테이블 ***********************/
 table.boardListTable {
 	/*테이블*/
@@ -465,4 +469,12 @@ table.popBoardTable {
 
 .popBoardTable select {
 	text-align: center;
+}
+
+#mod_b_writer {
+	text-align: center;
+}
+
+input[type=button].closePop {
+	background-color: #8a959b;
 }

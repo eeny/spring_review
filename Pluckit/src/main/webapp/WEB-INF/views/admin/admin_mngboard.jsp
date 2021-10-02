@@ -121,10 +121,10 @@
                             </tr>
 
                             <tr>
-                                <th>게시판 생성자</th>
-                                <td colspan="3"><input type="text" name="b_writer" id="b_writer"></td>
                                 <th>게시판 제목</th>
                                 <td colspan="3"><input type="text" name="b_title" id="b_title"></td>
+                                <th>게시판 생성자</th>
+                                <td colspan="3"><input type="text" name="b_writer" id="b_writer" value="${empInfo.emp_name }" readonly></td>
                             </tr>
 
                             <tr>
@@ -191,7 +191,6 @@
                             <!--테이블 컬럼 너비 조절하는 태그-->
                             <col width="10%" />
                             <col width="10%" />
-                            <col width="10%" />
                             <col width="30%" />
                             <col width="5%" />
                             <col width="5%" />
@@ -199,46 +198,36 @@
                             <col width="5%" />
                             <col width="10%" />
                             <col width="10%" />
+                            <col width="10%" />
                         </colgroup>
 
                         <tr>                                                       
                             <th>게시판 코드</th>
                             <th>담당부서</th>                            
-                            <th>생성자</th>
                             <th>게시판 제목</th>
                             <th>읽기권한</th>
                             <th>쓰기권한</th>
                             <th>댓글권한</th>
                             <th>다운권한</th>
+                            <th>생성자</th>
                             <th>생성일자</th>
                             <th>비고</th>
                         </tr>
 
-                        <tr>                                                       
-                            <td>notice</td>
-                            <td>총무회계</td>                            
-                            <td>김수미과장</td>
-                            <td>공지사항</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>2021-10-02</td>
-                            <td><button class="mod">수정</button>&nbsp;&nbsp;<button class="del">삭제</button></td>
-                        </tr>
-
-                        <tr>                                                       
-                            <td>qna</td>
-                            <td>총무회계</td>                            
-                            <td>김수미과장</td>
-                            <td>QnA</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>2021-10-02</td>
-                            <td><button class="mod">수정</button>&nbsp;&nbsp;<button class="del">삭제</button></td>
-                        </tr>
+						<c:forEach var="boardDto" items="${boardList }">
+	                        <tr>                                                       
+	                            <td>${boardDto. b_id}</td>
+	                            <td>${boardDto. deptName}</td>                            
+	                            <td>${boardDto. b_title}</td>
+	                            <td>${boardDto. b_readAuth}</td>
+	                            <td>${boardDto. b_writeAuth}</td>
+	                            <td>${boardDto. b_replyAuth}</td>
+	                            <td>${boardDto. b_downAuth}</td>
+	                            <td>${boardDto. b_writer}</td>
+	                            <td>${boardDto. b_regdate}</td>
+	                            <td><button class="mod">수정</button>&nbsp;&nbsp;<button class="del">삭제</button></td>
+	                        </tr>
+                        </c:forEach>
 
                     </table>
                     <div class="paging">
@@ -255,7 +244,7 @@
         <div class="pop">
         	<h1><i class="far fa-file-alt"></i> 게시판 수정</h1>
         	
-            <form action="#" name="modForm">
+            <form action="ModifyBoardProc.do" name="modForm" method="post">
                 <table class="popBoardTable">
                     <colgroup>
                         <!--테이블 컬럼 너비 조절하는 태그-->
@@ -271,7 +260,7 @@
                     
                     <tr>
                         <th>게시판 코드</th>
-                        <td colspan="3"><input type="text" name="b_id" id="mod_b_id" placeholder="영어로 입력" oninput="chkEng(this)"></td>
+                        <td colspan="3"><input type="text" name="b_id" id="mod_b_id" oninput="chkEng(this)" readonly></td>
                         <th>담당부서</th>
                         <td colspan="3">
                             <select name="dept_id" id="mod_dept_id">
@@ -286,10 +275,10 @@
                     </tr>
 
                     <tr>
-                        <th>게시판 생성자</th>
-                        <td colspan="3"><input type="text" name="b_writer" id="mod_b_writer"></td>
                         <th>게시판 제목</th>
                         <td colspan="3"><input type="text" name="b_title" id="mod_b_title"></td>
+                        <th>게시판 생성자</th>
+                        <td colspan="3"><input type="text" name="b_writer" id="mod_b_writer" readonly></td>
                     </tr>
 
                     <tr>
@@ -325,7 +314,7 @@
                 </table>
                 <div class="buttons">
                     <input type="button" value="게시판수정" onclick="modifyBoard()">
-                    <input type="reset" value="취소">
+                    <input type="button" class="closePop" value="취소">
                 </div>
             </form>
         </div>
@@ -380,7 +369,7 @@
 	        }, function(isConfirm) {
 	            if (isConfirm) {
 	                //swal('', '로그아웃 하셨습니다', "success");
-	                location.href = "LogoutProc.do";
+	                location.href = "LogoutProc.do?b_id=";
 	            }
 	        });
 	    }
@@ -401,15 +390,11 @@
         var mbForm = document.mbForm;
 
         var bId = document.getElementById("b_id");
-        var bWriter = document.getElementById("b_writer");
         var bTitle = document.getElementById("b_title");
 
         function makeBoard() {
             if (bId.value.trim().length <= 0) {
                 toastr.warning("게시판 코드를 입력해 주세요");
-                return false;
-            } else if (bWriter.value.trim().length <= 0) {
-                toastr.warning("게시판 생성자를 입력해 주세요");
                 return false;
             } else if (bTitle.value.trim().length <= 0) {
                 toastr.warning("게시판 제목을 입력해 주세요");
@@ -427,27 +412,29 @@
                   $(".pop").fadeIn(200);
               });
           });
+          
+          // 수정할 게시판 데이터 가져오기
+          $(".mod").click(function() {
+              
+          });
 
           $("#layer").click(function () {
               $(".pop").css("display", "none");
               $("#layer").fadeOut(100);
           });         
+          
+          $(".closePop").click(function() {
+        	  $(".pop").css("display", "none");
+              $("#layer").fadeOut(100);
+          });
       });
       
       // 게시판 정보 수정하기
       var modForm = document.modForm;
-      var modBId = document.getElementById("mod_b_id");
-      var modBWriter = document.getElementById("mod_b_writer");
       var modBTitle = document.getElementById("mod_b_title");
 
       function modifyBoard() {
-          if (modBId.value.trim().length <= 0) {
-              toastr.warning("게시판 코드를 입력해 주세요");
-              return false;
-          } else if (modBWriter.value.trim().length <= 0) {
-              toastr.warning("게시판 생성자를 입력해 주세요");
-              return false;
-          } else if (modBTitle.value.trim().length <= 0) {
+          if (modBTitle.value.trim().length <= 0) {
               toastr.warning("게시판 제목을 입력해 주세요");
               return false;
           } else {

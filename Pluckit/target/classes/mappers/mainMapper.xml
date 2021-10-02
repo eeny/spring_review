@@ -28,7 +28,7 @@
 			#{emp_birth}, 
 			#{emp_name}, 
 			#{emp_pw}, 
-			now(), 
+			CURDATE(), 
 			0
 		)
 	</insert>

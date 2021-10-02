@@ -110,6 +110,7 @@ public class HomeController {
 	@RequestMapping("/Employee.do")
 	public String emloyeeList(Model model) { 
 		model.addAttribute("employeeList", osvc.selectEmployeeListAll());
+		
 		return "office/office_employee";
 	}
 
@@ -158,17 +159,41 @@ public class HomeController {
 	// 관리자메뉴 페이지 이동
 	@RequestMapping("/Admin.do")
 	public String admin(Model model) {
-		
+		List<BoardDTO> boardList = adsvc.getAllBoardList();
+		model.addAttribute("boardList", boardList);
 		
 		return "admin/admin_mngboard";
 	}
 	
 	// 게시판 등록 처리
 	@RequestMapping("/MakeBoard.do")
-	public String makeBoard(BoardDTO dto, HttpServletResponse response) throws IOException {
+	public String makeBoard(BoardDTO dto) {
 		adsvc.makeBoard(dto);
+		adsvc.createMainTable(dto.getB_id());
+		adsvc.createReplyTable(dto.getB_id());
 		
 		return "redirect:/Admin.do";
+	}
+	
+	// 수정할 게시판 정보 가져오기
+	@RequestMapping("/GetBoardInfo.do")
+	public String getBoardInfo(String b_id) {
+		
+		return "";
+	}
+	
+	// 게시판 수정 처리
+	@RequestMapping("/ModifyBoardProc.do")
+	public String modifyBoard(String b_id) {
+		
+		return "";
+	}
+	
+	// 게시판 삭제 처리
+	@RequestMapping("/DeleteBoardProc.do")
+	public String deleteBoard(String b_id) {
+		
+		return "";
 	}
 	
 	// ===================== 관리자메뉴:게시판 관리 끝 =====================

@@ -11,6 +11,9 @@ public class BoardDTO {
 	private String b_downAuth;
 	private String b_regdate;
 	
+	// 실제 테이블에 존재하지 않는 변수들
+	private String deptName; // 부서명 변수 - 리스트 보여줄 때 사용
+
 	public String getB_id() {
 		return b_id;
 	}
@@ -64,5 +67,11 @@ public class BoardDTO {
 	}
 	public void setB_regdate(String b_regdate) {
 		this.b_regdate = b_regdate;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 }

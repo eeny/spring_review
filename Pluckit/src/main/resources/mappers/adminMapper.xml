@@ -4,7 +4,62 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin">
 	<!-- 관리용 게시판 정보 입력 -->
-	<insert id="makeBoard">
-		
+	<insert id="makeBoard" parameterType="com.pluckit.app.dto.BoardDTO">
+		INSERT INTO board (
+			b_id, 
+			dept_id, 
+			b_writer, 
+			b_title, 
+			b_readAuth, 
+			b_writeAuth, 
+			b_replyAuth, 
+			b_downAuth, 
+			b_regdate
+		) VALUES (
+			#{b_id}, 
+			#{dept_id}, 
+			#{b_writer}, 
+			#{b_title}, 
+			#{b_readAuth}, 
+			#{b_writeAuth}, 
+			#{b_replyAuth}, 
+			#{b_downAuth}, 
+			CURDATE()
+		)
 	</insert>
+	
+	<!-- 생성된 게시판 목록 가져오기 -->
+	<select id="getAllBoardList" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b.b_id, 
+			d.dept_name AS deptName, 
+			b.b_writer, 
+			b.b_title, 
+			b.b_readAuth, 
+			b.b_writeAuth, 
+			b.b_replyAuth, 
+			b.b_downAuth, 
+			b.b_regdate
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+	</select>
+	
+	<!-- 새로운 게시판 본문 테이블 생성하기 -->
+	<insert id="createMainTable" parameterType="HashMap">
+		${main}
+	</insert>
+	
+	<!-- 새로운 게시판 댓글 테이블 생성하기 -->
+	<insert id="createReplyTable" parameterType="HashMap">
+		${reply}
+	</insert>
+	
+	
+	
+	
+	
 </mapper>

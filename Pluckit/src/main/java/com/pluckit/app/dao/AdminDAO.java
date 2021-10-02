@@ -1,5 +1,8 @@
 package com.pluckit.app.dao;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,6 +16,18 @@ public class AdminDAO {
 
 	public int makeBaord(BoardDTO dto) {
 		return sqlSession.insert("admin.makeBoard", dto);
+	}
+
+	public List<BoardDTO> getAllBoardList() {
+		return sqlSession.selectList("admin.getAllBoardList");
+	}
+
+	public int createMainTable(HashMap<String, String> map) {
+		return sqlSession.insert("admin.createMainTable", map);
+	}
+
+	public int createReplyTable(HashMap<String, String> map) {
+		return sqlSession.insert("admin.createReplyTable", map);
 	}
 	
 	
