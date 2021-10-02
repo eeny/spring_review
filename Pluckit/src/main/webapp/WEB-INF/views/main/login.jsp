@@ -38,8 +38,8 @@
                 <!-- input태그들 -->
                 <div class="inputboxes">
                     <div class="alert" id="alert">${msg }</div>
-                    <input type="text" name="emp_num" class="id" placeholder="사원번호" onfocus="hideAlert()">
-                    <input type="password" name="emp_pw" class="pw" placeholder="비밀번호" onfocus="hideAlert()">
+                    <input type="text" name="emp_num" class="id" placeholder="사원번호" onfocus="hideAlert()" onkeypress="enter()">
+                    <input type="password" name="emp_pw" class="pw" placeholder="비밀번호" onfocus="hideAlert()" onkeypress="enter()">
                     <input type="button" class="submit" value="로그인" onclick="login()">
                 </div>
 
@@ -135,6 +135,13 @@
                 }
             	
                 loginForm.submit();
+            }
+        }
+        
+     	// 엔터키로 로그인하기
+        function enter() {
+            if (window.event.keyCode == 13) {
+                login();
             }
         }
         

@@ -1,8 +1,11 @@
 package com.pluckit.app;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.pluckit.app.dao.MainDAO;
+import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.DepartmentDTO;
 import com.pluckit.app.dto.EmployeeDTO;
 import com.pluckit.app.dto.RankDTO;
+import com.pluckit.app.service.AdminService;
 import com.pluckit.app.service.MainService;
 import com.pluckit.app.service.OfficeService;
 
@@ -24,6 +29,9 @@ public class HomeController {
 	
 	@Autowired 
 	private OfficeService osvc;
+	
+	@Autowired
+	private AdminService adsvc;
 	
 	// 웹사이트 최초 메인화면으로 이동
 	@RequestMapping("/Home.do")
@@ -144,6 +152,31 @@ public class HomeController {
 	}
 	
 	// ===================== 오피스:직원목록 끝 =====================
+	
+	// ===================== 관리자메뉴:게시판 관리 시작 =====================
+	
+	// 관리자메뉴 페이지 이동
+	@RequestMapping("/Admin.do")
+	public String admin(Model model) {
+		
+		
+		return "admin/admin_mngboard";
+	}
+	
+	// 게시판 등록 처리
+	@RequestMapping("/MakeBoard.do")
+	public String makeBoard(BoardDTO dto, HttpServletResponse response) throws IOException {
+		adsvc.makeBoard(dto);
+		
+		return "redirect:/Admin.do";
+	}
+	
+	// ===================== 관리자메뉴:게시판 관리 끝 =====================
+	
+	
+	
+	
+	
 	
 	
 	

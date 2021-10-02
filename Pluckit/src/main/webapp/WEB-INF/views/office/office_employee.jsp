@@ -46,7 +46,7 @@
                     <li><a href="#"><i class="far fa-calendar-alt"></i> 일정관리</a></li>
                     <!-- <li><a href="#"><i class="fas fa-cogs"></i> 관리자메뉴</a></li> -->
                     <c:if test="${empInfo.emp_auth eq 5 }">
-                    <li><a href="#"><i class="fas fa-cogs"></i> 관리자메뉴</a></li>
+                    <li><a href="Admin.do"><i class="fas fa-cogs"></i> 관리자메뉴</a></li>
                     </c:if>
                 </ul>
             </div>
