@@ -106,7 +106,7 @@
                             
                             <tr>
                                 <th>게시판 코드</th>
-                                <td colspan="3"><input type="text" name="b_id" id="b_id" placeholder="영어로 입력" oninput="chkEng(this)"></td>
+                                <td colspan="3"><input type="text" name="b_id" id="b_id" placeholder="영어로 입력" oninput="chkEng(this)" onblur="chkBId(this)"></td>
                                 <th>담당부서</th>
                                 <td colspan="3">
                                     <select name="dept_id" id="dept_id">
@@ -225,7 +225,7 @@
 	                            <td>${boardDto. b_downAuth}</td>
 	                            <td>${boardDto. b_writer}</td>
 	                            <td>${boardDto. b_regdate}</td>
-	                            <td><button class="mod">수정</button>&nbsp;&nbsp;<button class="del">삭제</button></td>
+	                            <td><button class="mod" onclick="getBoardInfo('${boardDto.b_id}')">수정</button>&nbsp;&nbsp;<button class="del">삭제</button></td>
 	                        </tr>
                         </c:forEach>
 
@@ -260,7 +260,7 @@
                     
                     <tr>
                         <th>게시판 코드</th>
-                        <td colspan="3"><input type="text" name="b_id" id="mod_b_id" oninput="chkEng(this)" readonly></td>
+                        <td colspan="3"><input type="text" name="b_id" id="mod_b_id" readonly></td>
                         <th>담당부서</th>
                         <td colspan="3">
                             <select name="dept_id" id="mod_dept_id">
@@ -385,6 +385,29 @@
         function chkEng(e) {
             e.value = e.value.replace(/[^A-Za-z]/ig, '');
         }
+        
+        // 게시판 코드 중복 체크
+        function chkBId(e) {
+			var bCode = {b_id: e.value}
+			
+			$.ajax({
+				type: "post",
+				url: "IsBIdExist.do",
+				data: JSON.stringify(bCode),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function(data) {
+					if (data.result > 0) {
+						toastr.warning("이미 사용중인 게시판코드 입니다.");
+						e.value = "";
+						e.focus();								
+					}
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
 
         // 게시판 등록하기
         var mbForm = document.mbForm;
@@ -405,19 +428,8 @@
             }
         }
         
-      // 모달창 나타나기 & 사라지기
+      // 모달창 사라지기
       $(function() {
-          $(".mod").click(function() {
-              $("#layer").fadeIn(300, function() {
-                  $(".pop").fadeIn(200);
-              });
-          });
-          
-          // 수정할 게시판 데이터 가져오기
-          $(".mod").click(function() {
-              
-          });
-
           $("#layer").click(function () {
               $(".pop").css("display", "none");
               $("#layer").fadeOut(100);
@@ -428,6 +440,38 @@
               $("#layer").fadeOut(100);
           });
       });
+      
+      // 모달창 띄우기 & 수정할 게시판 데이터 가져오기
+      function getBoardInfo(bcode) {
+    	  $(".mod").click(function() {
+              $("#layer").fadeIn(300, function() {
+                  $(".pop").fadeIn(200);
+              });
+          });
+    	  
+    	  var bId = {b_id: bcode}
+    	  
+          $.ajax({
+        	  type: "post",
+        	  url: "GetBoardInfo.do",
+        	  data: JSON.stringify(bId),
+        	  contentType: "application/json; charset=utf-8",
+			  dataType: "json",
+        	  success: function(data) {        		  
+	       			$("#mod_b_id").val(data.b_id);			
+	       			$("#mod_dept_id").val(data.dept_id);			
+					$("#mod_b_title").val(data.b_title);			
+					$("#mod_b_writer").val(data.b_writer);								
+					$("#mod_b_readAuth").val(data.b_readAuth);			
+					$("#mod_b_writeAuth").val(data.b_writeAuth);			
+					$("#mod_b_replyAuth").val(data.b_replyAuth);			
+					$("#mod_b_downAuth").val(data.b_downAuth);
+			  },
+			  error: function(data) {
+					alert("시스템 에러 발생!");
+			}
+          });
+      }
       
       // 게시판 정보 수정하기
       var modForm = document.modForm;

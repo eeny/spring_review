@@ -68,6 +68,14 @@ public class AdminService {
 		addao.createReplyTable(map);
 	}
 
+	public int isBIdExist(String bId) {		
+		return addao.isBIdExist(bId);
+	}
+
+	public BoardDTO getBoardInfo(String bId) {
+		return addao.getBoardInfo(bId);
+	}
+
 	
 	
 	

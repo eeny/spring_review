@@ -29,6 +29,14 @@ public class AdminDAO {
 	public int createReplyTable(HashMap<String, String> map) {
 		return sqlSession.insert("admin.createReplyTable", map);
 	}
+
+	public int isBIdExist(String bId) {
+		return sqlSession.selectOne("admin.isBIdExist", bId);
+	}
+
+	public BoardDTO getBoardInfo(String bId) {
+		return sqlSession.selectOne("admin.getBoardInfo", bId);
+	}
 	
 	
 	

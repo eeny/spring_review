@@ -11,7 +11,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pluckit.app.dao.MainDAO;
 import com.pluckit.app.dto.BoardDTO;
@@ -175,11 +178,21 @@ public class HomeController {
 		return "redirect:/Admin.do";
 	}
 	
-	// 수정할 게시판 정보 가져오기
-	@RequestMapping("/GetBoardInfo.do")
-	public String getBoardInfo(String b_id) {
+	// 게시판 코드 중복 확인 처리
+	@RequestMapping(value = "/IsBIdExist.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Integer> isBIdExist(@RequestBody BoardDTO dto) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("result", adsvc.isBIdExist(dto.getB_id()));
 		
-		return "";
+		return map;
+	}
+	
+	// 수정할 게시판 정보 가져오기	
+	@RequestMapping(value = "/GetBoardInfo.do", method = RequestMethod.POST)
+	@ResponseBody
+	public BoardDTO getBoardInfo(@RequestBody BoardDTO dto) {
+		return adsvc.getBoardInfo(dto.getB_id());
 	}
 	
 	// 게시판 수정 처리

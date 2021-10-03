@@ -58,8 +58,31 @@
 		${reply}
 	</insert>
 	
+	<!-- 게시판 코드 중복 체크하기 -->
+	<select id="isBIdExist" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(b_id) 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{bId}
+	</select>
 	
-	
-	
+	<!-- 수정할 게시판 정보 가져오기 -->
+	<select id="getBoardInfo" parameterType="String" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b_id, 
+			dept_id, 
+			b_writer, 
+			b_title, 
+			b_readAuth, 
+			b_writeAuth, 
+			b_replyAuth, 
+			b_downAuth 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{bId}
+	</select>
 	
 </mapper>
