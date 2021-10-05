@@ -1,0 +1,5 @@
+create table bootboard(
+	idx int primary key AUTO_INCREMENT,
+	name varchar(200),
+	title varchar(200)
+);
