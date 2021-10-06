@@ -197,9 +197,9 @@ public class HomeController {
 	
 	// 게시판 수정 처리
 	@RequestMapping("/ModifyBoardProc.do")
-	public String modifyBoard(String b_id) {
-		
-		return "";
+	public String modifyBoard(BoardDTO dto) {
+		adsvc.updateBoardInfo(dto.getB_id());
+		return "redirect:/Admin.do";
 	}
 	
 	// 게시판 삭제 처리
