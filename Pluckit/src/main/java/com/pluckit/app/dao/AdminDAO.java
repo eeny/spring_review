@@ -37,6 +37,10 @@ public class AdminDAO {
 	public BoardDTO getBoardInfo(String bId) {
 		return sqlSession.selectOne("admin.getBoardInfo", bId);
 	}
+
+	public int updateBoardInfo(BoardDTO dto) {
+		return sqlSession.update("admin.updateBoardInfo", dto);
+	}
 	
 	
 	

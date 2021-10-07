@@ -485,7 +485,7 @@
               //toastr.success("게시판이 수정 되었습니다");
               modForm.submit();
           }
-      }      
+      }     
     </script>
 </body>
 

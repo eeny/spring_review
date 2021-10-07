@@ -76,8 +76,8 @@ public class AdminService {
 		return addao.getBoardInfo(bId);
 	}
 
-	public void updateBoardInfo(String b_id) {
-		
+	public int updateBoardInfo(BoardDTO dto) {
+		return addao.updateBoardInfo(dto);
 	}
 
 	

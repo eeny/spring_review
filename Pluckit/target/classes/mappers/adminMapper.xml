@@ -85,4 +85,19 @@
 			b_id = #{bId}
 	</select>
 	
+	<!-- 게시판 정보 수정하기 -->
+	<update id="updateBoardInfo" parameterType="com.pluckit.app.dto.BoardDTO">
+		UPDATE board 
+		SET 
+			dept_id = #{dept_id}, 
+			b_title = #{b_title}, 
+			b_readAuth = #{b_readAuth}, 
+			b_writeAuth = #{b_writeAuth}, 
+			b_replyAuth = #{b_replyAuth}, 
+			b_downAuth = #{b_downAuth}, 
+			b_regdate = CURDATE() 
+		WHERE 
+			b_id = #{b_id}
+	</update>
+	
 </mapper>
