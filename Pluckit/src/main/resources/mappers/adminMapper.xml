@@ -100,4 +100,30 @@
 			b_id = #{b_id}
 	</update>
 	
+	<!-- 삭제할 게시판 내에 데이터 존재 유무 확인 -->
+	<select id="isBoardDataExist" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(bm_num) 
+		FROM 
+			${value}
+	</select>
+	
+	
+	<!-- 댓글 게시판 삭제 -->
+	<insert id="dropReplyTable" parameterType="HashMap">
+		${reply}
+	</insert>
+	
+	<!-- 본문 게시판 삭제 -->
+	<insert id="dropMaintable" parameterType="HashMap">
+		${main}
+	</insert>
+	
+	<!-- 게시판 정보 삭제 -->
+	<delete id="deleteBoardInfo" parameterType="String">
+		DELETE FROM board 
+		WHERE 
+			b_id = #{bId}
+	</delete>
+	
 </mapper>

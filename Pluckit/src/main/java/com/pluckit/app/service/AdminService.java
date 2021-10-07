@@ -41,8 +41,6 @@ public class AdminService {
 			str	+= " CONSTRAINT FK_board_main_"+ bId +"_b_id_board_b_id FOREIGN KEY (b_id)";
 			str	+= " REFERENCES board (b_id) ON DELETE RESTRICT ON UPDATE RESTRICT);";
 		
-		System.out.println("*************************" + str);
-		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("main", str);
 		
@@ -59,8 +57,6 @@ public class AdminService {
 			str += " CONSTRAINT PK_board_reply_" + bId + " PRIMARY KEY (r_num, bm_num),";
 			str += " CONSTRAINT FK_board_reply_" + bId + "_bm_num_board_main_" + bId + "_bm_num FOREIGN KEY (bm_num)";
 			str += " REFERENCES board_main_" + bId + " (bm_num) ON DELETE RESTRICT ON UPDATE RESTRICT);";
-		
-		System.out.println("*************************" + str);
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("reply", str);
@@ -79,6 +75,33 @@ public class AdminService {
 	public int updateBoardInfo(BoardDTO dto) {
 		return addao.updateBoardInfo(dto);
 	}
+
+	public int isBoardDataExist(String bId) {
+		String tblName = "board_main_" + bId;
+		return addao.isBoardDataExist(tblName);
+	}
+
+	public void dropReplyTable(String bId) {
+		String str = "DROP TABLE board_reply_" + bId;
+		HashMap<String, String> map = new HashMap<>();
+		map.put("reply", str);
+		
+		addao.dropReplyTable(map);
+	}
+
+	public void dropMainTable(String bId) {
+		String str = "DROP TABLE board_main_" + bId;
+		HashMap<String, String> map = new HashMap<>();
+		map.put("main", str);
+		
+		addao.dropMainTable(map);
+	}
+
+	public int deleteBoardInfo(String bId) {
+		return addao.deleteBoardInfo(bId);
+	}
+
+	
 
 	
 

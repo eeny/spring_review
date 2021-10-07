@@ -41,6 +41,22 @@ public class AdminDAO {
 	public int updateBoardInfo(BoardDTO dto) {
 		return sqlSession.update("admin.updateBoardInfo", dto);
 	}
+
+	public int isBoardDataExist(String tblName) {
+		return sqlSession.selectOne("admin.isBoardDataExist", tblName);
+	}
+
+	public int dropReplyTable(HashMap<String, String> map) {
+		return sqlSession.insert("admin.dropReplyTable", map);
+	}
+
+	public int dropMainTable(HashMap<String, String> map) {
+		return sqlSession.insert("admin.dropMaintable", map);
+	}
+
+	public int deleteBoardInfo(String bId) {
+		return sqlSession.delete("admin.deleteBoardInfo", bId);
+	}
 	
 	
 	

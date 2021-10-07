@@ -1,5 +1,6 @@
 package com.pluckit.app;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -170,7 +171,7 @@ public class HomeController {
 	
 	// 게시판 등록 처리
 	@RequestMapping("/MakeBoard.do")
-	public String makeBoard(BoardDTO dto) {
+	public String makeBoard(BoardDTO dto, Model model) {
 		adsvc.makeBoard(dto);
 		adsvc.createMainTable(dto.getB_id());
 		adsvc.createReplyTable(dto.getB_id());
@@ -202,11 +203,23 @@ public class HomeController {
 		return "redirect:/Admin.do";
 	}
 	
+	// 게시판 삭제 전 데이터 존재유무 확인
+	@RequestMapping(value = "/IsBoardDataExist.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Integer> IsBoardDataExist(@RequestBody BoardDTO dto) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("result", adsvc.isBoardDataExist(dto.getB_id()));
+		return map;
+	}
+	
 	// 게시판 삭제 처리
 	@RequestMapping("/DeleteBoardProc.do")
 	public String deleteBoard(String b_id) {
+		adsvc.dropReplyTable(b_id);
+		adsvc.dropMainTable(b_id);
+		adsvc.deleteBoardInfo(b_id);
 		
-		return "";
+		return "redirect:/Admin.do";
 	}
 	
 	// ===================== 관리자메뉴:게시판 관리 끝 =====================
