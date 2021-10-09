@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<!-- 게시판 제목 목록 가져오기 (일반 권한) -->
+	<select id="getAllBoardTitleUser" parameterType="String" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b.b_id, b.b_title
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			d.dept_name IN(#{deptName})
+		AND NOT 
+			b.b_id IN('notice')
+		ORDER BY 
+			b_regdate
+	</select>
+	
+	<!-- 게시판 제목 목록 가져오기 (관리자 권한) -->
+	<select id="getAllBoardTitleAdmin" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b_id, 
+			b_title 
+		FROM 
+			board 
+		WHERE NOT 
+			b_id IN('notice') 
+		ORDER BY 
+			b_regdate
+	</select>
+	
+	
+	<!-- 게시판 제목 가져오기 -->
+	<select id="getBoardTitle" parameterType="String" resultType="String">
+		SELECT 
+			b_title 
+		FROM 
+			board 
+		WHERE 
+			b_id = #{pageName}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

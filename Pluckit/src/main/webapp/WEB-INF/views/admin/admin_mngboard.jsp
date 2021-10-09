@@ -52,7 +52,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="board_notice.html">
+						<a href="Board.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=notice">
 							<i class="fas fa-table"></i> 게시판
 						</a>
 					</li>
@@ -297,22 +297,30 @@
 					<div class="paging">
 						<!--페이징 시작-->
 						<c:if test="${paging.pageNum > 1 }">
-							<span><a href="Admin.do?pageNum=1"><i class="fas fa-angle-double-left"></i></a></span>
-							<span><a href="Admin.do?pageNum=${paging.pageNum-1 }"><i class="fas fa-angle-left"></i></a></span>							
+							<span><a href="Admin.do?pageNum=1">
+									<i class="fas fa-angle-double-left"></i>
+								</a></span>
+							<span><a href="Admin.do?pageNum=${paging.pageNum-1 }">
+									<i class="fas fa-angle-left"></i>
+								</a></span>
 						</c:if>
-                        <c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
-	                        <c:if test="${paging.pageNum eq i }">
-	                        	<span class="nowPage"><a href="Admin.do?pageNum=${i }" class="nowPage">${i }</a></span>
-	                        </c:if>
-	                        <c:if test="${paging.pageNum ne i }">
-	                        	<span><a href="Admin.do?pageNum=${i }">${i }</a></span>
-	                        </c:if>                        
-                        </c:forEach>
-                        <c:if test="${paging.pageNum < paging.totalPage }">
-	                        <span><a href="Admin.do?pageNum=${paging.pageNum+1 }"><i class="fas fa-angle-right"></i></a></span>
-	                        <span><a href="Admin.do?pageNum=${paging.totalPage }"><i class="fas fa-angle-double-right"></i></a></span>                        	
-                        </c:if>
-                        
+						<c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
+							<c:if test="${paging.pageNum eq i }">
+								<span class="nowPage"><a href="Admin.do?pageNum=${i }" class="nowPage">${i }</a></span>
+							</c:if>
+							<c:if test="${paging.pageNum ne i }">
+								<span><a href="Admin.do?pageNum=${i }">${i }</a></span>
+							</c:if>
+						</c:forEach>
+						<c:if test="${paging.pageNum < paging.totalPage }">
+							<span><a href="Admin.do?pageNum=${paging.pageNum+1 }">
+									<i class="fas fa-angle-right"></i>
+								</a></span>
+							<span><a href="Admin.do?pageNum=${paging.totalPage }">
+									<i class="fas fa-angle-double-right"></i>
+								</a></span>
+						</c:if>
+
 					</div>
 					<!--페이징 끝-->
 				</section>
@@ -465,23 +473,25 @@
 		}
 
 		var delConfirm = function(msg, title, param) {
-			swal({
-				title : title,
-				text : "<span style='font-size:25px;font-weight:600;color:#575757;'>"+msg+"</span>",
-				html : true,
-				type : "warning",
-				showCancelButton : true,
-				confirmButtonClass : "btn-danger",
-				confirmButtonText : "예",
-				cancelButtonText : "아니오",
-				closeOnConfirm : false,
-				closeOnCancel : true
-			}, function(isConfirm) {
-				if (isConfirm) {
-					//swal('', '로그아웃 하셨습니다', "success");
-					location.href = "DeleteBoardProc.do?b_id=" + param;
-				}
-			});
+			swal(
+					{
+						title : title,
+						text : "<span style='font-size:25px;font-weight:600;color:#575757;'>"
+								+ msg + "</span>",
+						html : true,
+						type : "warning",
+						showCancelButton : true,
+						confirmButtonClass : "btn-danger",
+						confirmButtonText : "예",
+						cancelButtonText : "아니오",
+						closeOnConfirm : false,
+						closeOnCancel : true
+					}, function(isConfirm) {
+						if (isConfirm) {
+							//swal('', '로그아웃 하셨습니다', "success");
+							location.href = "DeleteBoardProc.do?b_id=" + param;
+						}
+					});
 		}
 
 		function Alert(msg) {
@@ -610,23 +620,28 @@
 				b_id : bcode
 			}
 
-			$.ajax({
-				type : "post",
-				url : "IsBoardDataExist.do",
-				data : JSON.stringify(bId),
-				contentType : "application/json; charset=utf-8",
-				dataType : "json",
-				success : function(data) {
-					if (data.result > 0) { // 해당 게시판에 데이터가 존재하는 경우
-						DelConfirm("해당 게시판에 게시글이 존재합니다.<br>게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?", bcode);
-					} else { // 게시판에 데이터가 없는 경우
-						DelConfirm("게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",bcode);
-					}
-				},
-				error : function(data) {
-					alert("시스템 에러 발생!");
-				}
-			});
+			$
+					.ajax({
+						type : "post",
+						url : "IsBoardDataExist.do",
+						data : JSON.stringify(bId),
+						contentType : "application/json; charset=utf-8",
+						dataType : "json",
+						success : function(data) {
+							if (data.result > 0) { // 해당 게시판에 데이터가 존재하는 경우
+								DelConfirm(
+										"해당 게시판에 게시글이 존재합니다.<br>게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
+										bcode);
+							} else { // 게시판에 데이터가 없는 경우
+								DelConfirm(
+										"게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
+										bcode);
+							}
+						},
+						error : function(data) {
+							alert("시스템 에러 발생!");
+						}
+					});
 		}
 	</script>
 </body>

@@ -1,15 +1,15 @@
 package com.pluckit.app.dto;
 
 public class BoardDTO {
-	private String b_id;
-	private String dept_id;
-	private String b_writer;
-	private String b_title;
-	private String b_readAuth;
-	private String b_writeAuth;
-	private String b_replyAuth;
-	private String b_downAuth;
-	private String b_regdate;
+	private String b_id; // 게시판 코드 - 테이블명에 사용
+	private String dept_id; // 담당부서
+	private String b_writer; // 게시판생성자
+	private String b_title; // 게시판제목
+	private String b_readAuth; // 읽기권한 0(모두), 1(직원)
+	private String b_writeAuth; // 쓰기권한 0(모두), 1(직원)
+	private String b_replyAuth; // 댓글권한 0(모두), 1(직원)
+	private String b_downAuth; // 다운권한 0(모두), 1(직원)
+	private String b_regdate; // 게시판생성일자
 	
 	// 실제 테이블에 존재하지 않는 변수들
 	private String deptName; // 부서명 변수 - 리스트 보여줄 때 사용

@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
-<title>오피스 - 직원목록</title>
+<title>관리자메뉴 - 게시판 관리</title>
 <!-- CSS 파일 -->
-<link rel="stylesheet" href="resources/css/office_employee.css">
+<link rel="stylesheet" href="resources/css/board_main.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <!-- Google Font -->
@@ -117,14 +117,13 @@
 					<!--왼쪽 세부 메뉴 시작-->
 					<ul>
 						<li>
-							<a href="#">직원목록</a>
+							<a href="Board.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=notice" class="maxTitle ${pageName eq 'notice' ? 'clickBtn' : '' }">공지사항</a>
 						</li>
-						<li>
-							<a href="#">거래처관리</a>
-						</li>
-						<li>
-							<a href="#">주소록</a>
-						</li>
+						<c:forEach var="bdto" items="${menuList }">
+							<li>
+								<a href="Board.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${bdto.b_id}" class="maxTitle ${pageName eq bdto.b_id ? 'clickBtn' : '' }">${bdto.b_title }</a>
+							</li>							
+						</c:forEach>
 					</ul>
 				</section>
 				<!--왼쪽 세부 메뉴 끝-->
@@ -135,22 +134,20 @@
 				<section class="main-right">
 					<!--게시판 본문 시작-->
 					<h1>
-						<i class="far fa-file-alt"></i> 직원목록
+						<i class="far fa-file-alt"></i> 공지사항
 					</h1>
 
 					<!--검색 box 추가-->
 
-					<form action="SearchProc.do">
+					<form action="#">
 						<table class="search-box">
 							<tr>
 								<td>
 									<select name="select" class="select-kind">
-										<option value="emp_name">이름</option>
-										<option value="emp_num">사번</option>
-										<option value="dept_id">소속</option>
-										<option value="rank_id">직위</option>
+										<option value="bm_title">제목</option>
+										<option value="bm_writer">작성자</option>
 									</select>
-									<input type="text" placeholder="검색어를 입력하세요" name="search">
+									<input type="text" placeholder="검색어를 입력하세요">
 									<button type="submit">
 										<i class="fas fa-search"></i>
 									</button>
@@ -162,42 +159,55 @@
 					<table class="noticeTable">
 						<colgroup>
 							<!--테이블 컬럼 너비 조절하는 태그-->
+							<col width="5%" />
+							<col width="52%" />
+							<col width="10%" />
 							<col width="15%" />
-							<col width="15%" />
-							<col width="20%" />
-							<col width="20%" />
-							<col width="15%" />
-							<col width="15%" />
+							<col width="6%" />
+							<col width="6%" />
+							<col width="6%" />
 						</colgroup>
-
-						<tr>
-							<th>사번</th>
-							<th>이름</th>
-							<th>전화번호</th>
-							<th>이메일</th>
-							<th>소속</th>
-							<th>직위</th>
-						</tr>
-
-						<c:forEach var="employee" items="${employeeList}">
+						<thead>
 							<tr>
-								<td>${employee.emp_num}</td>
-								<td>${employee.emp_name}</td>
-								<td>${employee.emp_tel}</td>
-								<td>${employee.emp_email}</td>
-								<td>${employee.deptName}</td>
-								<td>${employee.rankName}</td>
+								<th>No.</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>작성일</th>
+								<th>조회수</th>
+								<th>댓글수</th>
+								<th>파일</th>
 							</tr>
-						</c:forEach>
-
+						</thead>
+						<tbody>
+							<tr>
+								<td>555555</td>
+								<td>제목2</td>
+								<td>작성자2</td>
+								<td>2021-09-03 17:57:25</td>
+								<td>0</td>
+								<td>0</td>
+								<td>11</td>
+							</tr>
+						</tbody>
 					</table>
-
 					<div class="paging">
 						<!--페이징 시작-->
-						<span><a href="#">1</a></span><span><a href="#">2</a></span><span><a href="#">3</a></span>
+						<span><a href="#">
+								<i class="fas fa-angle-double-left"></i>
+							</a></span><span><a href="#">
+								<i class="fas fa-angle-left"></i>
+							</a></span> <span><a href="#">1</a></span><span class="nowPage"><a href="#" class="nowPage">2</a></span><span><a href="#">3</a></span> <span><a href="#">
+								<i class="fas fa-angle-right"></i>
+							</a></span><span><a href="#">
+								<i class="fas fa-angle-double-right"></i>
+							</a></span>
 					</div>
 					<!--페이징 끝-->
-
+					<div class="buttons">
+						<!--글쓰기 버튼들 시작-->
+						<a href="WriteBoard.do?pageName=${pageName }" class="write">글쓰기</a>
+					</div>
+					<!--글쓰기 버튼들 끝-->
 				</section>
 				<!--게시판 본문 끝-->
 			</div>
@@ -205,7 +215,26 @@
 		</main>
 	</div>
 
-	<script type="text/javascript">
+	<script>
+		// toastr 설정
+		toastr.options = {
+			"closeButton" : false,
+			"debug" : false,
+			"newestOnTop" : false,
+			"progressBar" : false,
+			"positionClass" : "toast-top-right",
+			"preventDuplicates" : false,
+			"onclick" : null,
+			"showDuration" : "300",
+			"hideDuration" : "1000",
+			"timeOut" : "1000",
+			"extendedTimeOut" : "1000",
+			"showEasing" : "swing",
+			"hideEasing" : "linear",
+			"showMethod" : "fadeIn",
+			"hideMethod" : "fadeOut"
+		}
+
 		// Sweet Alert 설정
 		var alert = function(msg, type) {
 			swal({
@@ -243,7 +272,14 @@
 		function Confirm(msg) {
 			confirm('', msg);
 		}
-	</script>
-</body>
 
+		// 게시판 제목 길이 제한 (13자 넘으면 잘림)
+		var titleArray = document.getElementsByClassName("maxTitle");
+		for (var i = 0; i < titleArray.length; i++) {
+			var shortTitle = titleArray[i].innerText.substr(0, 13);
+			titleArray[i].innerText = shortTitle;
+		}
+	</script>
+
+</body>
 </html>

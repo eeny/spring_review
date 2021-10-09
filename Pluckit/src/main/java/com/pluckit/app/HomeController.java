@@ -25,19 +25,25 @@ import com.pluckit.app.dto.EmployeeDTO;
 import com.pluckit.app.dto.PagingDTO;
 import com.pluckit.app.dto.RankDTO;
 import com.pluckit.app.service.AdminService;
+import com.pluckit.app.service.BoardService;
 import com.pluckit.app.service.MainService;
 import com.pluckit.app.service.OfficeService;
 
 @Controller
 public class HomeController {
 	@Autowired
-	private MainService msvc;
+	private MainService msvc; // [main]
 	
 	@Autowired 
-	private OfficeService osvc;
+	private OfficeService osvc; // [office]
 	
 	@Autowired
-	private AdminService adsvc;
+	private AdminService adsvc; // [admin]
+	
+	@Autowired
+	private BoardService bsvc; // [board]
+	
+	
 	
 	// 웹사이트 최초 메인화면으로 이동
 	@RequestMapping("/Home.do")
@@ -123,37 +129,7 @@ public class HomeController {
 	// 직원목록 검색 처리
 	@RequestMapping("/SearchProc.do")
 	public String searchEmployeeList(Model model, String select, String search) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		
-		// 검색시 부서코드와 직급코드는 따로 구분해서 검색어 변경
-		if (select.equals("dept_id")) {
-			switch (search) {
-				case "인사": search = "100"; break;
-				case "영업": search = "200"; break;
-				case "마케팅": search = "300"; break;
-				case "총무회계": search = "400"; break;
-				case "기술지원": search = "500"; break;
-				case "전략기획": search = "600"; break;
-				default: search = "";	break;
-			}
-		}
-		if (select.equals("rank_id")) {
-			switch (search) {
-				case "사원": search = "1"; break;
-				case "대리": search = "2"; break;
-				case "과장": search = "3"; break;
-				case "차장": search = "4"; break;
-				case "부장": search = "5"; break;
-				case "이사": search = "6"; break;
-				case "전무": search = "7"; break;
-				case "사장": search = "8"; break;
-				default: search = "";	break;
-			}
-		}
-		
-		map.put("select", select);
-		map.put("search", search);
-		model.addAttribute("employeeList", osvc.selectEmployeeListOne(map));
+		model.addAttribute("employeeList", osvc.selectEmployeeListOne(select, search));
 		
 		return "office/office_employee";
 	}
@@ -262,8 +238,42 @@ public class HomeController {
 	}
 	
 	
-	
 	// ===================== 관리자메뉴:게시판 관리 끝 =====================
+
+	
+	// ===================== 게시판 메뉴 시작 =====================
+	// [게시판] 메뉴 페이지 이동
+	@RequestMapping("/Board.do")
+	public String board(@RequestParam(value = "pageNum", required = false, defaultValue = "1") String pNum, String deptName, String empAuth, String pageName, Model model) {
+		// 왼쪽 세부 메뉴 목록 가져오기
+		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
+			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));			
+		} else {
+			model.addAttribute("menuList", bsvc.getAllBoardTitle());
+		}
+		
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+		
+		// 게시글 목록 가져오기 & 페이징
+		
+		//model.addAttribute("boardList", bsvc.getBoardList(pageName));
+		
+		
+		return "board/board_main";
+	}
+	
+	// [게시판] 메뉴 글쓰기 페이지 이동
+	@RequestMapping("/WriteBoard.do")
+	public String writeBoard(String pageName, Model model) {
+		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
+		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+		
+		return "board/board_write";
+	}
+	
+	
+	// ===================== 게시판 메뉴 끝 =====================
 	
 	
 	
