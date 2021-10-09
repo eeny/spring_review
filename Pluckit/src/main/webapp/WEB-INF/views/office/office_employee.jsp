@@ -92,7 +92,7 @@
 
                     <!--검색 box 추가-->
 
-                    <form action="SerchProc.do">
+                    <form action="SearchProc.do">
                         <table class="search-box">
                             <tr>
                                 <td>

@@ -15,12 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pluckit.app.dao.MainDAO;
 import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.DepartmentDTO;
 import com.pluckit.app.dto.EmployeeDTO;
+import com.pluckit.app.dto.PagingDTO;
 import com.pluckit.app.dto.RankDTO;
 import com.pluckit.app.service.AdminService;
 import com.pluckit.app.service.MainService;
@@ -119,8 +121,8 @@ public class HomeController {
 	}
 
 	// 직원목록 검색 처리
-	@RequestMapping("/SerchProc.do")
-	public String serchEmployeeList(Model model, String select, String search) {
+	@RequestMapping("/SearchProc.do")
+	public String searchEmployeeList(Model model, String select, String search) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		
 		// 검색시 부서코드와 직급코드는 따로 구분해서 검색어 변경
@@ -162,9 +164,14 @@ public class HomeController {
 	
 	// 관리자메뉴 페이지 이동
 	@RequestMapping("/Admin.do")
-	public String admin(Model model) {
-		List<BoardDTO> boardList = adsvc.getAllBoardList();
+	public String admin(@RequestParam(value = "pageNum", required = false, defaultValue = "1") String pNum, Model model) {
+		// 총 게시판 개수, 페이징 처리
+		int totalCount = adsvc.getAllBoardCount();
+		PagingDTO pDto = new PagingDTO(Integer.parseInt(pNum), 10, totalCount, 3);
+		
+		List<BoardDTO> boardList = adsvc.getAllBoardList(pDto.getOffset(), pDto.getPageSize());
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", pDto);
 		
 		return "admin/admin_mngboard";
 	}
@@ -200,6 +207,7 @@ public class HomeController {
 	@RequestMapping("/ModifyBoardProc.do")
 	public String modifyBoard(BoardDTO dto) {
 		adsvc.updateBoardInfo(dto);
+		
 		return "redirect:/Admin.do";
 	}
 	
@@ -209,6 +217,7 @@ public class HomeController {
 	public HashMap<String, Integer> IsBoardDataExist(@RequestBody BoardDTO dto) {
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("result", adsvc.isBoardDataExist(dto.getB_id()));
+		
 		return map;
 	}
 	
@@ -221,6 +230,38 @@ public class HomeController {
 		
 		return "redirect:/Admin.do";
 	}
+	
+	// 게시판 검색 처리
+	@RequestMapping("/SearchBoardList.do")
+	public String searchBoardList(@RequestParam(value = "pageNum", required = false, defaultValue = "1") String pNum, Model model, String select, String search) {
+		// 검색어 처리
+		HashMap<String, String> map = new HashMap<>();
+		
+		if (select.equals("b_id") || select.equals("b_title")) {
+			select = "b." + select;
+		} else if (select.equals("dept_id")) {
+			select = "d.dept_name";
+		}
+		
+		map.put("select", select);
+		map.put("search", search);
+		
+		// 총 게시판 개수, 페이징 처리
+		int totalCount = adsvc.getSearchBoardCount(map);
+		PagingDTO pDto = new PagingDTO(Integer.parseInt(pNum), 10, totalCount, 3);
+				
+		map.put("offset", Integer.toString(pDto.getOffset()));
+		map.put("pageSize", Integer.toString(pDto.getPageSize()));
+		
+		List<BoardDTO> boardList = adsvc.searchBoardList(map);
+
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", pDto);
+		
+		return "admin/admin_mngboard";
+	}
+	
+	
 	
 	// ===================== 관리자메뉴:게시판 관리 끝 =====================
 	

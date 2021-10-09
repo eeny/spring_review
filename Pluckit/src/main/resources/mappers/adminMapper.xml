@@ -24,12 +24,12 @@
 			#{b_writeAuth}, 
 			#{b_replyAuth}, 
 			#{b_downAuth}, 
-			CURDATE()
+			NOW()
 		)
 	</insert>
 	
 	<!-- 생성된 게시판 목록 가져오기 -->
-	<select id="getAllBoardList" resultType="com.pluckit.app.dto.BoardDTO">
+	<select id="getAllBoardList" resultType="com.pluckit.app.dto.BoardDTO" parameterType="HashMap">
 		SELECT 
 			b.b_id, 
 			d.dept_name AS deptName, 
@@ -46,6 +46,10 @@
 			department AS d
 		ON 
 			b.dept_id = d.dept_id
+		ORDER BY 
+			b.b_regdate DESC
+		LIMIT 
+			${offset}, ${pageSize}
 	</select>
 	
 	<!-- 새로운 게시판 본문 테이블 생성하기 -->
@@ -95,7 +99,7 @@
 			b_writeAuth = #{b_writeAuth}, 
 			b_replyAuth = #{b_replyAuth}, 
 			b_downAuth = #{b_downAuth}, 
-			b_regdate = CURDATE() 
+			b_regdate = NOW() 
 		WHERE 
 			b_id = #{b_id}
 	</update>
@@ -107,7 +111,6 @@
 		FROM 
 			${value}
 	</select>
-	
 	
 	<!-- 댓글 게시판 삭제 -->
 	<insert id="dropReplyTable" parameterType="HashMap">
@@ -125,5 +128,52 @@
 		WHERE 
 			b_id = #{bId}
 	</delete>
+	
+	<!-- 게시판 검색 리스트 -->
+	<select id="searchBoardList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardDTO">
+		SELECT 
+			b.b_id, 
+			d.dept_name AS deptName, 
+			b.b_writer, 
+			b.b_title, 
+			b.b_readAuth, 
+			b.b_writeAuth, 
+			b.b_replyAuth, 
+			b.b_downAuth, 
+			b.b_regdate
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY 
+			b.b_regdate DESC
+		LIMIT 
+			${offset}, ${pageSize}
+	</select>
+	
+	<!-- 게시판 총 개수 -->
+	<select id="getAllBoardCount" resultType="int">
+		SELECT 
+			COUNT(b_id) 
+		FROM board
+	</select>
+	
+	<!-- 게시판 검색 리스트 총 개수 -->
+	<select id="getSearchBoardCount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(b.b_id)
+		FROM 
+			board AS b
+		LEFT JOIN 
+			department AS d
+		ON 
+			b.dept_id = d.dept_id
+		WHERE 
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
 	
 </mapper>

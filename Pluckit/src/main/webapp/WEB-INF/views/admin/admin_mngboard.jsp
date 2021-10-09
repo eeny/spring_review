@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -226,7 +227,7 @@
 					</h1>
 
 					<!--검색 box 추가-->
-					<form action="#">
+					<form action="SearchBoardList.do">
 						<table class="search-box">
 							<tr>
 								<td>
@@ -272,6 +273,7 @@
 							<th>비고</th>
 						</tr>
 
+						<%-- <c:forEach var="boardDto" items="${boardList }"> --%>
 						<c:forEach var="boardDto" items="${boardList }">
 							<tr>
 								<td>${boardDto. b_id}</td>
@@ -282,7 +284,7 @@
 								<td>${boardDto. b_replyAuth}</td>
 								<td>${boardDto. b_downAuth}</td>
 								<td>${boardDto. b_writer}</td>
-								<td>${boardDto. b_regdate}</td>
+								<td>${fn:substring(boardDto. b_regdate, 0, 10)}</td>
 								<td>
 									<button class="mod" onclick="getBoardInfo('${boardDto.b_id}')">수정</button>
 									&nbsp;&nbsp;
@@ -294,7 +296,23 @@
 					</table>
 					<div class="paging">
 						<!--페이징 시작-->
-						<span><a href="#">1</a></span><span><a href="#">2</a></span><span><a href="#">3</a></span>
+						<c:if test="${paging.pageNum > 1 }">
+							<span><a href="Admin.do?pageNum=1"><i class="fas fa-angle-double-left"></i></a></span>
+							<span><a href="Admin.do?pageNum=${paging.pageNum-1 }"><i class="fas fa-angle-left"></i></a></span>							
+						</c:if>
+                        <c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
+	                        <c:if test="${paging.pageNum eq i }">
+	                        	<span class="nowPage"><a href="Admin.do?pageNum=${i }" class="nowPage">${i }</a></span>
+	                        </c:if>
+	                        <c:if test="${paging.pageNum ne i }">
+	                        	<span><a href="Admin.do?pageNum=${i }">${i }</a></span>
+	                        </c:if>                        
+                        </c:forEach>
+                        <c:if test="${paging.pageNum < paging.totalPage }">
+	                        <span><a href="Admin.do?pageNum=${paging.pageNum+1 }"><i class="fas fa-angle-right"></i></a></span>
+	                        <span><a href="Admin.do?pageNum=${paging.totalPage }"><i class="fas fa-angle-double-right"></i></a></span>                        	
+                        </c:if>
+                        
 					</div>
 					<!--페이징 끝-->
 				</section>

@@ -18,8 +18,8 @@ public class AdminDAO {
 		return sqlSession.insert("admin.makeBoard", dto);
 	}
 
-	public List<BoardDTO> getAllBoardList() {
-		return sqlSession.selectList("admin.getAllBoardList");
+	public List<BoardDTO> getAllBoardList(HashMap<String, Integer> map) {
+		return sqlSession.selectList("admin.getAllBoardList", map);
 	}
 
 	public int createMainTable(HashMap<String, String> map) {
@@ -56,6 +56,18 @@ public class AdminDAO {
 
 	public int deleteBoardInfo(String bId) {
 		return sqlSession.delete("admin.deleteBoardInfo", bId);
+	}
+
+	public List<BoardDTO> searchBoardList(HashMap<String, String> map) {
+		return sqlSession.selectList("admin.searchBoardList", map);
+	}
+
+	public int getAllBoardCount() {
+		return sqlSession.selectOne("admin.getAllBoardCount");
+	}
+
+	public int getSearchBoardCount(HashMap<String, String> map) {
+		return sqlSession.selectOne("admin.getSearchBoardCount", map);
 	}
 	
 	

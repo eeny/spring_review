@@ -333,9 +333,11 @@ table.boardListTable {
 	text-align: center;
 }
 
-.paging {
-	/*페이징*/
+.paging { /*페이징*/
 	text-align: center;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
 }
 
 .paging span {
@@ -347,11 +349,23 @@ table.boardListTable {
 }
 
 .paging a {
+	width: 100%;
+	height: 100%;
 	font-size: 12px;
-	line-height: 22px;
-	/* 수직 중앙 정렬 */
+	line-height: 22px; /* 수직 중앙 정렬 */
 	color: #333;
 	display: block;
+}
+
+span.nowPage {
+	border: none;
+}
+
+a.nowPage {
+	background-color: blue;
+	color: white;
+	font-weight: 600;
+	line-height: 23px;
 }
 
 .buttons {

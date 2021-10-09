@@ -18,8 +18,11 @@ public class AdminService {
 		addao.makeBaord(dto);
 	}
 
-	public List<BoardDTO> getAllBoardList() {
-		return addao.getAllBoardList();
+	public List<BoardDTO> getAllBoardList(int offset, int pageSize) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("offset", offset);
+		map.put("pageSize", pageSize);
+		return addao.getAllBoardList(map);
 	}
 
 	public void createMainTable(String bId) {
@@ -99,6 +102,18 @@ public class AdminService {
 
 	public int deleteBoardInfo(String bId) {
 		return addao.deleteBoardInfo(bId);
+	}
+
+	public List<BoardDTO> searchBoardList(HashMap<String, String> map) {
+		return addao.searchBoardList(map);
+	}
+
+	public int getAllBoardCount() {
+		return addao.getAllBoardCount();
+	}
+
+	public int getSearchBoardCount(HashMap<String, String> map) {
+		return addao.getSearchBoardCount(map);
 	}
 
 	
