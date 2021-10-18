@@ -272,6 +272,11 @@ table.noticeTable { /*테이블*/
 	color: #0382c2;
 }
 
+.noticeTable td:nth-child(2):hover { /* 제목 컬럼 hover 커서 */
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 .paging { /*페이징*/
 	text-align: center;
 	display: flex;
