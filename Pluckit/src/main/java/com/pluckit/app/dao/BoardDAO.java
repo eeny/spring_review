@@ -1,5 +1,6 @@
 package com.pluckit.app.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -23,6 +24,10 @@ public class BoardDAO {
 
 	public String getBoardTitle(String pageName) {
 		return sqlSession.selectOne("board.getBoardTitle", pageName);
+	}
+
+	public int writePostProc(HashMap<String, String> map) {
+		return sqlSession.insert("board.writePostProc", map);
 	}
 	
 	

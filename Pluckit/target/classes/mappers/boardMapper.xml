@@ -33,8 +33,7 @@
 		ORDER BY 
 			b_regdate
 	</select>
-	
-	
+		
 	<!-- 게시판 제목 가져오기 -->
 	<select id="getBoardTitle" parameterType="String" resultType="String">
 		SELECT 
@@ -44,6 +43,23 @@
 		WHERE 
 			b_id = #{pageName}
 	</select>
+	
+	<!-- 게시글 입력 -->
+	<insert id="writePostProc" parameterType="HashMap">
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0
+	</insert>
+	
+	
 	
 	
 	

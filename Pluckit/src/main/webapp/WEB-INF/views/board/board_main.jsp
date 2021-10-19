@@ -205,7 +205,7 @@
 					<!--페이징 끝-->
 					<div class="buttons">
 						<!--글쓰기 버튼들 시작-->
-						<a href="WriteBoard.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth}&pageName=${pageName }" class="write">글쓰기</a>
+						<a href="WritePost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth}&pageName=${pageName }" class="write">글쓰기</a>
 					</div>
 					<!--글쓰기 버튼들 끝-->
 				</section>

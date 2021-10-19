@@ -38,10 +38,4 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	// 에디터 높이 설정
 	config.height = '400';
-	
-	// 이미지 파일 업로드 설정
-	config.filebrowserUploadUrl = '${pageContext.request.contextPath}/ImageUpload.do';
-	
-	// 이미지 파일 업로드 시 잘못된 서버 응답 오류 방지
-	config.filebrowserUploadMethod = 'form';
 };

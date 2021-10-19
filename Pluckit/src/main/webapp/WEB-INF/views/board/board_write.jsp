@@ -124,7 +124,7 @@
 						<c:forEach var="bdto" items="${menuList }">
 							<li>
 								<a href="Board.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${bdto.b_id}" class="maxTitle ${pageName eq bdto.b_id ? 'clickBtn' : '' }">${bdto.b_title }</a>
-							</li>							
+							</li>
 						</c:forEach>
 					</ul>
 				</section>
@@ -139,7 +139,9 @@
 						<i class="far fa-file-alt"></i> ${pageTitle }
 					</h1>
 
-					<form action="#" name="bdForm">
+					<form name="bdForm" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="b_id" id="bId">
+						<input type="hidden" name="bm_writer" value="${empInfo.emp_name }">
 						<table class="noticeTable">
 							<colgroup>
 								<!--테이블 컬럼 너비 조절하는 태그-->
@@ -161,7 +163,7 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="textAreaTd">
-									<textarea name="bm_content" id="bmContent" rows="10"></textarea>
+									<textarea name="bm_content" id="bm_content" rows="10"></textarea>
 								</td>
 							</tr>
 						</table>
@@ -261,10 +263,10 @@
 		function CancelConfirm(msg) {
 			cancelConfirm(msg, '', '');
 		}
-		
+
 		// textarea를 ckeditor로 교체
-		CKEDITOR.replace('bm_content', {filebrowserUploadUrl:'${pageContext.request.contextPath}/ImageUpload.do'});
-		
+		CKEDITOR.replace('bm_content');
+
 		// 게시판 제목 길이 제한 (13자 넘으면 잘림)
 		var titleArray = document.getElementsByClassName("maxTitle");
 		for (var i = 0; i < titleArray.length; i++) {
@@ -272,21 +274,37 @@
 			titleArray[i].innerText = shortTitle;
 		}
 
+		// 주소줄 파라미터 추출하기 - form에서 게시판코드 넘길 때 사용
+		function getParam(name) {
+			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex
+					.exec(location.search);
+			return results == null ? "" : decodeURIComponent(results[1]
+					.replace(/\+/g, " "));
+		}
+
 		// 게시글 저장하기
 		var bdForm = document.bdForm;
 		var title = document.getElementById("bmTitle");
-		var content = document.getElementById("bmContent");
+		//var content = document.getElementById("bmContent");
+		//var content = CKEDITOR.instances.bm_content.getData();
+		var bId = document.getElementById("bId");
 
 		function writeBoard() {
 			if (title.value.trim().length <= 0) {
 				toastr.warning("제목을 입력해주세요");
 				title.focus();
 				return false;
-			} else if (content.value.trim().length <= 0) {
+			} else if (CKEDITOR.instances.bm_content.getData().length <= 0) {
 				toastr.warning("내용을 입력해주세요");
-				content.focus();
+				CKEDITOR.instances.bm_content.focus();
 				return false;
 			} else {
+				bId.value = getParam("pageName");
+				bdForm.action = "WritePostProc.do?deptName="
+						+ getParam("deptName") + "&empAuth="
+						+ getParam("empAuth") + "&pageName="
+						+ getParam("pageName");
 				bdForm.submit();
 			}
 		}
@@ -300,10 +318,6 @@
 		$(function() {
 			var realFile = $("#bmFile");
 			var fileLabel = $(".noticeTable label");
-
-			// realFile.click(function () {
-			//     alert(fileLabel.text());
-			// });
 
 			realFile.on('change', function() {
 				if (window.FileReader) {
