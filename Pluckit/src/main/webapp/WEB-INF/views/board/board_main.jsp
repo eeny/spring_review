@@ -179,15 +179,17 @@
 							</tr>
 						</thead>
 						<tbody>
+						<c:forEach var="bdto" items="${boardList }" >
 							<tr>
-								<td>555555</td>
-								<td>제목2</td>
-								<td>작성자2</td>
-								<td>2021-09-03 17:57:25</td>
-								<td>0</td>
-								<td>0</td>
-								<td>11</td>
+								<td>${bdto.bm_num}</td>
+								<td>${bdto.bm_title }</td>
+								<td>${bdto.bm_writer }</td>
+								<td>${bdto.bm_regdate }</td>
+								<td>${bdto.bm_hit }</td>
+								<td>000</td>
+								<td>000</td>
 							</tr>
+						</c:forEach>
 						</tbody>
 					</table>
 					<div class="paging">

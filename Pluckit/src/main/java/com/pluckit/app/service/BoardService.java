@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.pluckit.app.dao.BoardDAO;
 import com.pluckit.app.dto.BoardDTO;
+import com.pluckit.app.dto.BoardMainDTO;
 
 @Service
 public class BoardService {
@@ -82,6 +83,12 @@ public class BoardService {
 		}
 		
 	}
+	
+	public List<BoardMainDTO> getBoardList(String pageName) {
+		return bdao.getBoardList(pageName);
+	}
+	
+	
 
 	// 파일명 중복 안되게 수정하는 메서드 (UUID방식)
 	private String uploadFile(String originalName, byte[] fileData) throws IOException {
@@ -98,4 +105,6 @@ public class BoardService {
 
 		return saveFileName;
 	}
+
+	
 }// BoardService 끝

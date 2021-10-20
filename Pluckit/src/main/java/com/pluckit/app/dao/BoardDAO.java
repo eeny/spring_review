@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pluckit.app.dto.BoardDTO;
+import com.pluckit.app.dto.BoardMainDTO;
 
 @Repository
 public class BoardDAO {
@@ -28,6 +29,10 @@ public class BoardDAO {
 
 	public int writePostProc(HashMap<String, String> map) {
 		return sqlSession.insert("board.writePostProc", map);
+	}
+
+	public List<BoardMainDTO> getBoardList(String pageName) {
+		return sqlSession.selectList("board.getBoardList", pageName);
 	}
 	
 	

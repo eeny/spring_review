@@ -256,7 +256,7 @@ public class HomeController {
 
 		// 게시글 목록 가져오기 & 페이징
 
-		// model.addAttribute("boardList", bsvc.getBoardList(pageName));
+		 model.addAttribute("boardList", bsvc.getBoardList(pageName));
 
 		return "board/board_main";
 	}
