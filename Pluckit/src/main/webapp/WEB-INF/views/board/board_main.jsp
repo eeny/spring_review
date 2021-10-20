@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -184,7 +185,33 @@
 								<td>${bdto.bm_writer }</td>
 								<td>${bdto.bm_regdate }</td>
 								<td>${bdto.bm_hit }</td>
-								<td>${bdto.bm_file }</td>
+								<td>
+									<c:choose>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'jpg' || fn:split(bdto.bm_file, '.')[1] eq  'png' || fn:split(bdto.bm_file, '.')[1] eq  'gif'}">
+											<i class="fas fa-file-image"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'pptx'}">
+											<i class="fas fa-file-powerpoint"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'doc'}">
+											<i class="fas fa-file-word"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'xls'}">
+											<i class="fas fa-file-excel"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'pdf'}">
+											<i class="fas fa-file-pdf"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'hwp' || fn:split(bdto.bm_file, '.')[1] eq  'txt'}">
+											<i class="fas fa-file-alt"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'zip'}">
+											<i class="fas fa-file-archive"></i>
+										</c:when>
+										<c:otherwise>
+										</c:otherwise>
+									</c:choose>
+								</td>
 							</tr>
 						</c:forEach>
 						</tbody>
