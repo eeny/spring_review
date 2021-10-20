@@ -60,7 +60,7 @@
 	</insert>
 	
 	<!-- 게시글 목록 가져오기 -->
-	<select id="getBoardList" parameterType="String" resultType="com.pluckit.app.dto.BoardMainDTO">
+	<select id="getAllBoardList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
 		SELECT 
 			bm_num,
 			b_id,
@@ -76,13 +76,20 @@
 			bm_grpord,
 			bm_grpdepth
 		FROM 
-			board_main_${value}
+			board_main_${pageName}
 		ORDER BY
 			bm_num DESC
+		LIMIT
+			${offset}, ${pageSize}
 	</select>
 	
-	
-	
+	<!-- 게시글 개수 가져오기 -->
+	<select id="getAllBoardCount" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(bm_num) 
+		FROM 
+			board_main_${value}
+	</select>
 	
 	
 	

@@ -84,8 +84,12 @@ public class BoardService {
 		
 	}
 	
-	public List<BoardMainDTO> getBoardList(String pageName) {
-		return bdao.getBoardList(pageName);
+	public List<BoardMainDTO> getAllBoardList(String pageName, int offset, int pageSize) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pageName", pageName);
+		map.put("offset", Integer.toString(offset));
+		map.put("pageSize", Integer.toString(pageSize));
+		return bdao.getAllBoardList(map);
 	}
 	
 	
@@ -104,6 +108,10 @@ public class BoardService {
 		FileCopyUtils.copy(fileData, target);
 
 		return saveFileName;
+	}
+
+	public int getAllBoardCount(String pageName) {
+		return bdao.getAllBoardCount(pageName);
 	}
 
 	

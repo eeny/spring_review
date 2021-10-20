@@ -163,9 +163,8 @@
 							<col width="52%" />
 							<col width="10%" />
 							<col width="15%" />
-							<col width="6%" />
-							<col width="6%" />
-							<col width="6%" />
+							<col width="9%" />
+							<col width="9%" />
 						</colgroup>
 						<thead>
 							<tr>
@@ -174,35 +173,48 @@
 								<th>작성자</th>
 								<th>작성일</th>
 								<th>조회수</th>
-								<th>댓글수</th>
 								<th>파일</th>
 							</tr>
 						</thead>
 						<tbody>
-						<c:forEach var="bdto" items="${boardList }" >
+						<c:forEach var="bdto" items="${boardList }" varStatus="vs">
 							<tr>
-								<td>${bdto.bm_num}</td>
-								<td>${bdto.bm_title }</td>
+								<td>${vs.count}</td>
+								<td><a href="ReadPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${bdto.bm_num}">${bdto.bm_title }</a></td>
 								<td>${bdto.bm_writer }</td>
 								<td>${bdto.bm_regdate }</td>
 								<td>${bdto.bm_hit }</td>
-								<td>000</td>
-								<td>000</td>
+								<td>${bdto.bm_file }</td>
 							</tr>
 						</c:forEach>
 						</tbody>
 					</table>
 					<div class="paging">
 						<!--페이징 시작-->
-						<span><a href="#">
-								<i class="fas fa-angle-double-left"></i>
-							</a></span><span><a href="#">
-								<i class="fas fa-angle-left"></i>
-							</a></span> <span><a href="#">1</a></span><span class="nowPage"><a href="#" class="nowPage">2</a></span><span><a href="#">3</a></span> <span><a href="#">
-								<i class="fas fa-angle-right"></i>
-							</a></span><span><a href="#">
-								<i class="fas fa-angle-double-right"></i>
-							</a></span>
+						<c:if test="${paging.pageNum > 1 }">
+							<span><a href="Board.do?pageNum=1&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">
+									<i class="fas fa-angle-double-left"></i>
+								</a></span>
+							<span><a href="Board.do?pageNum=${paging.pageNum-1 }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">
+									<i class="fas fa-angle-left"></i>
+								</a></span>
+						</c:if>
+						<c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
+							<c:if test="${paging.pageNum eq i }">
+								<span class="nowPage"><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}" class="nowPage">${i }</a></span>
+							</c:if>
+							<c:if test="${paging.pageNum ne i }">
+								<span><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">${i }</a></span>
+							</c:if>
+						</c:forEach>
+						<c:if test="${paging.pageNum < paging.totalPage }">
+							<span><a href="Board.do?pageNum=${paging.pageNum+1 }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">
+									<i class="fas fa-angle-right"></i>
+								</a></span>
+							<span><a href="Board.do?pageNum=${paging.totalPage }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">
+									<i class="fas fa-angle-double-right"></i>
+								</a></span>
+						</c:if>
 					</div>
 					<!--페이징 끝-->
 					<div class="buttons">

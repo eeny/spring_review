@@ -31,8 +31,12 @@ public class BoardDAO {
 		return sqlSession.insert("board.writePostProc", map);
 	}
 
-	public List<BoardMainDTO> getBoardList(String pageName) {
-		return sqlSession.selectList("board.getBoardList", pageName);
+	public List<BoardMainDTO> getAllBoardList(HashMap<String, String> map) {
+		return sqlSession.selectList("board.getAllBoardList", map);
+	}
+
+	public int getAllBoardCount(String pageName) {
+		return sqlSession.selectOne("board.getAllBoardCount", pageName);
 	}
 	
 	

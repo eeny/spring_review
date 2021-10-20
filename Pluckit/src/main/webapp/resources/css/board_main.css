@@ -269,7 +269,14 @@ table.noticeTable { /*테이블*/
 .noticeTable td:nth-child(2) { /* 제목 컬럼 */
 	text-align: left;
 	padding-left: 15px;
+}
+
+.noticeTable td:nth-child(2) a {
+	width: 100%;
+	height: 100%;
+	line-height: 30px;
 	color: #0382c2;
+	display: block;
 }
 
 .noticeTable td:nth-child(2):hover { /* 제목 컬럼 hover 커서 */

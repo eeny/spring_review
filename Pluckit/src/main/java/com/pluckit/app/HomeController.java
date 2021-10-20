@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pluckit.app.dto.BoardDTO;
+import com.pluckit.app.dto.BoardMainDTO;
 import com.pluckit.app.dto.EmployeeDTO;
 import com.pluckit.app.dto.PagingDTO;
 import com.pluckit.app.service.AdminService;
@@ -255,8 +256,12 @@ public class HomeController {
 		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
 
 		// 게시글 목록 가져오기 & 페이징
+		int totalCount = bsvc.getAllBoardCount(pageName);
+		PagingDTO pDto = new PagingDTO(Integer.parseInt(pNum), 10, totalCount, 3);
 
-		 model.addAttribute("boardList", bsvc.getBoardList(pageName));
+		List<BoardMainDTO> boardList = bsvc.getAllBoardList(pageName, pDto.getOffset(), pDto.getPageSize());
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", pDto);
 
 		return "board/board_main";
 	}
@@ -271,51 +276,73 @@ public class HomeController {
 			model.addAttribute("menuList", bsvc.getAllBoardTitle());
 		}
 
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+
 		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
 		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
 
 		return "board/board_write";
 	}
 
-	
 	// [게시판] 메뉴 글 작성하기
 	@Autowired
 	ServletContext context;
 
 	@RequestMapping("/WritePostProc.do")
-	public String writePostProc(String deptName, String empAuth, String pageName, MultipartHttpServletRequest mrequest, RedirectAttributes redirect) throws IOException {
+	public String writePostProc(String deptName, String empAuth, String pageName, MultipartHttpServletRequest mrequest,
+			RedirectAttributes redirect) throws IOException {
 		bsvc.writePostProc(context, mrequest);
-		
+
 		// 리다이렉트 시 같이 넘겨야하는 파라미터
 		redirect.addAttribute("deptName", deptName);
 		redirect.addAttribute("empAuth", empAuth);
 		redirect.addAttribute("pageName", pageName);
-		
+
 		return "redirect:/Board.do";
 	}
-	
+
+	// [게시판] 메뉴 글 읽기 페이지 이동
+	@RequestMapping("/ReadPost.do")
+	public String readPost(String deptName, String empAuth, String pageName, String bmNum, Model model) {
+		// 왼쪽 세부 메뉴 목록 가져오기
+		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
+			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));
+		} else {
+			model.addAttribute("menuList", bsvc.getAllBoardTitle());
+		}
+
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+
+		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
+		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+		
+		// *************************** 글 내용 가져오기 만들어야함!!! ****************************
+
+		return "board/board_read";
+	}
+
 	// [게시판] 메뉴 글 수정 페이지 이동
 	@RequestMapping("/ModifyPost.do")
 	public String modifyPost() {
-		
+
 		return "";
 	}
-	
 
 	// [게시판] 메뉴 글 수정
 	@RequestMapping("/ModifyPostProc.do")
 	public String modifyPostProc() {
-		
+
 		return "";
 	}
-	
+
 	// [게시판] 메뉴 글 삭제
 	@RequestMapping("/DeletePostProc.do")
 	public String deletePostProc() {
-		
+
 		return "";
 	}
-	
 
 	// ===================== 게시판 메뉴 끝 =====================
 
