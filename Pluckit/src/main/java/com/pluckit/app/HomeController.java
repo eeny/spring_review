@@ -323,7 +323,7 @@ public class HomeController {
 
 		// 조회수 증가
 		bsvc.updateHitCount(pageName, bmNum);
-		
+
 		model.addAttribute("post", bsvc.getPost(pageName, bmNum));
 
 		return "board/board_read";
@@ -331,32 +331,61 @@ public class HomeController {
 
 	// [게시판] 게시글 첨부파일 다운로드
 	@RequestMapping("/FileDownload.do")
-	public String fileDownload(String bmFile, String bmSFile, HttpSession session,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String fileDownload(String bmFile, String bmSFile, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
 		bsvc.fileDownload(context, bmFile, bmSFile, session, request, response);
-		
+
 		return "";
 	}
 
 	// [게시판] 메뉴 글 수정 페이지 이동
 	@RequestMapping("/ModifyPost.do")
-	public String modifyPost() {
+	public String modifyPost(String deptName, String empAuth, String pageName, String bmNum, Model model) {
+		// 왼쪽 세부 메뉴 목록 가져오기
+		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
+			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));
+		} else {
+			model.addAttribute("menuList", bsvc.getAllBoardTitle());
+		}
 
-		return "";
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+
+		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
+		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+
+		// 기존 게시글 내용 가져오기
+		model.addAttribute("post", bsvc.getPost(pageName, bmNum));
+
+		return "board/board_write";
 	}
 
 	// [게시판] 메뉴 글 수정
 	@RequestMapping("/ModifyPostProc.do")
-	public String modifyPostProc() {
+	public String modifyPostProc(String deptName, String empAuth, String pageName, String bmNum, Model model,
+			MultipartHttpServletRequest mrequest, RedirectAttributes redirect) throws IOException {
+		bsvc.modifyPost(context, mrequest, bmNum);
 
-		return "";
+		// 리다이렉트 시 같이 넘겨야하는 파라미터
+		redirect.addAttribute("deptName", deptName);
+		redirect.addAttribute("empAuth", empAuth);
+		redirect.addAttribute("pageName", pageName);
+		redirect.addAttribute("bmNum", bmNum);
+
+		return "redirect:/ReadPost.do";
 	}
 
 	// [게시판] 메뉴 글 삭제
 	@RequestMapping("/DeletePostProc.do")
-	public String deletePostProc() {
+	public String deletePostProc(String deptName, String empAuth, String pageName, String bmNum, RedirectAttributes redirect) {
+		bsvc.deletePost(pageName, bmNum);
+		
+		// 리다이렉트 시 같이 넘겨야하는 파라미터
+		redirect.addAttribute("deptName", deptName);
+		redirect.addAttribute("empAuth", empAuth);
+		redirect.addAttribute("pageName", pageName);
 
-		return "";
+		return "redirect:/Board.do";
 	}
 
 	// ===================== 게시판 메뉴 끝 =====================

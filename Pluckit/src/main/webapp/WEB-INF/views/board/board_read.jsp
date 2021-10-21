@@ -176,18 +176,86 @@
 								</td>
 							</tr>
 						</table>
-						
+
 						<script>imgSize("img");</script>
-						
+
 						<div class="buttons">
 							<!--글쓰기 버튼들 시작-->
 							<a class="write">답글</a>
-							<a class="write">삭제</a>
-							<a class="write">수정</a>
+							<c:if test="${empInfo.emp_auth eq 5 || empInfo.emp_name eq post.bm_writer }">
+								<a class="write" href="ModifyPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${post.bm_num}">수정</a>
+								<a class="write" onclick="DelConfirm('글을 삭제하시겠습니까?', '${empInfo.deptName }', '${empInfo.emp_auth }', '${pageName}', '${post.bm_num}')">삭제</a>
+							</c:if>
 							<a class="write cancel" onclick="history.back()">목록</a>
 						</div>
 						<!--글쓰기 버튼들 끝-->
 					</form>
+
+					<!-- 댓글 시작 -->
+					<div class="replyWrap">
+						<form action="#" method="post">
+							<div class="replyBox">
+								<input type="hidden" name="bm_num" value="">
+								<input type="hidden" name="r_writer" value="">
+								<textarea name="r_content"></textarea>
+								<input type="submit" value="댓글작성">
+							</div>
+						</form>
+
+						<p class="replyCount">댓글 (3)</p>
+
+						<ul class="replyList">
+							<li>
+								<div>
+									<img src="resources/img/user.png" alt="user">
+								</div>
+								<div class="replyContent">
+									<p class="replyTop">
+										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
+										</span>
+									</p>
+									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
+								</div>
+							</li>
+							<li>
+								<div>
+									<img src="resources/img/user.png" alt="user">
+								</div>
+								<div class="replyContent">
+									<p class="replyTop">
+										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
+										</span>
+									</p>
+									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
+								</div>
+							</li>
+							<li>
+								<div>
+									<img src="resources/img/user.png" alt="user">
+								</div>
+								<div class="replyContent">
+									<p class="replyTop">
+										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
+										</span>
+									</p>
+									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
+								</div>
+							</li>
+							<li>
+								<div>
+									<img src="resources/img/user.png" alt="user">
+								</div>
+								<div class="replyContent">
+									<p class="replyTop">
+										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
+										</span>
+									</p>
+									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- 댓글 끝 -->
 				</section>
 				<!--게시판 본문 끝-->
 			</div>
@@ -245,12 +313,35 @@
 				}
 			});
 		}
+		
+		var delConfirm = function(msg, title, deptName, empAuth, pageName, bmNum) {
+			swal(
+					{
+						title : title,
+						text : msg,
+						html : true,
+						type : "warning",
+						showCancelButton : true,
+						confirmButtonClass : "btn-danger",
+						confirmButtonText : "예",
+						cancelButtonText : "아니오",
+						closeOnConfirm : false,
+						closeOnCancel : true
+					}, function(isConfirm) {
+						if (isConfirm) {
+							location.href = "DeletePostProc.do?deptName=" + deptName + "&empAuth=" + empAuth + "&pageName=" + pageName + "&bmNum=" + bmNum;
+						}
+					});
+		}
 
 		function Alert(msg) {
 			alert(msg, 'success');
 		}
 		function Confirm(msg) {
 			confirm('', msg);
+		}
+		function DelConfirm(msg, deptName, empAuth, pageName, bmNum) {
+			delConfirm('', msg, deptName, empAuth, pageName, bmNum);	
 		}
 
 		// 게시판 제목 길이 제한 (13자 넘으면 잘림)

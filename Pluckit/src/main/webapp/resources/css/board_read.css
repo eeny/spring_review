@@ -251,6 +251,7 @@ div.fileImg {
 
 .buttons { /*버튼들 - 글쓰기*/
 	text-align: right;
+	margin-bottom: 30px;
 }
 
 a.write {
@@ -265,4 +266,130 @@ a.write {
 
 a.cancel {
 	background-color: #8a959b;
+}
+
+/* 댓글 */
+div.replyWrap {
+	width: 100%;
+}
+
+div.replyBox { /* 댓글 작성 부분 */
+	padding: 15px;
+	background-color: #e9e9e9;
+	display: flex;
+	justify-content: space-between;
+}
+
+.replyBox textarea {
+	width: 1300px;
+	padding: 2px 5px;
+	border: 1px solid #cacaca;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.replyBox textarea:focus {
+	outline: none;
+}
+
+.replyBox input[type='submit'] {
+	width: 90px;
+	height: 75px;
+	border: none;
+	border-radius: 5px 5px 5px 5px;
+	background-color: tomato;
+	color: white;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+p.replyCount { /* 댓글 개수 */
+	font-size: 14px;
+	font-weight: bold;
+	padding: 20px 0 10px 0;
+}
+
+ul.replyList { /* 댓글 목록 */
+	width: 100%;
+	background-color: #e9e9e9;
+	padding: 2px 15px 10px 15px;
+	font-size: 14px;
+}
+
+.replyList li {
+	border-bottom: 1px solid #cacaca;
+	padding-bottom: 10px;
+	margin-top: 10px;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+}
+
+.replyList img {
+	width: 50px;
+}
+
+div.replyContent {
+	width: 95%;
+	background-color: skyblue;
+	position: relative;
+	border-radius: .2em;
+	padding: 10px;
+	color: #333;
+}
+
+div.replyContent:after { /* 댓글 말풍선 뾰족모양 */
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 35%;
+	width: 0;
+	height: 0;
+	border: 7px solid transparent;
+	border-right-color: skyblue;
+	border-left: 0;
+	margin-top: -7px;
+	margin-left: -7px;
+}
+
+.replyList li:nth-child(2n) div.replyContent { /* 짝수번째 말풍선 색깔 다르게 */
+	background-color: pink;
+}
+
+.replyList li:nth-child(2n) div.replyContent:after {
+	border-right-color: pink;
+}
+
+p.replyTop {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin-bottom: 5px;
+}
+
+.replyTop span:first-child {
+	font-weight: bold;
+}
+
+.replyTop span:nth-child(2) {
+	width: 1160px;
+	color: #797979;
+}
+
+.replyTop a {
+	color: #333;
+}
+
+.replyTop a:first-child {
+	padding-right: 10px;
+	border-right: 1px solid #333;
+}
+
+.replyTop a:last-child {
+	padding-left: 5px;
+}
+
+.replyTop a:hover {
+	text-decoration: underline;
 }

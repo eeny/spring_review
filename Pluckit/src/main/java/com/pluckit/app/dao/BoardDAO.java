@@ -46,6 +46,19 @@ public class BoardDAO {
 	public BoardMainDTO getPost(HashMap<String, String> map) {
 		return sqlSession.selectOne("board.getPost", map);
 	}
+
+	public String getFileName(HashMap<String, String> map) {
+		return sqlSession.selectOne("board.getFileName", map);
+	}
+
+	public int modifyPost(HashMap<String, String> map) {
+		return sqlSession.update("board.modifyPost", map);
+	}
+
+	public int deletePost(HashMap<String, String> map) {
+		return sqlSession.delete("board.deletePost", map);
+	}
+
 	
 	
 }

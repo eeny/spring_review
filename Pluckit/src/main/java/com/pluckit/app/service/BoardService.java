@@ -144,4 +144,67 @@ public class BoardService {
 		}
 	}
 
+	public void modifyPost(ServletContext context, MultipartHttpServletRequest mrequest, String bmNum) throws IOException {
+		HashMap<String, String> map = new HashMap<>();
+
+		// 파일을 제외한 나머지 값
+		String b_id = mrequest.getParameter("b_id");
+		String bm_writer = mrequest.getParameter("bm_writer");
+		String bm_title = mrequest.getParameter("bm_title");
+		String bm_content = mrequest.getParameter("bm_content");
+		String bm_num = bmNum;
+
+		MultipartFile file = mrequest.getFile("bm_file"); // 넘어온 파일 객체
+		String fileName = file.getOriginalFilename(); // 파일 객체 이름 갖고오기
+
+		map.put("b_id", b_id);
+		map.put("bm_writer", bm_writer);
+		map.put("bm_title", bm_title);
+		map.put("bm_content", bm_content);
+		map.put("bm_num", bm_num);
+
+		// 파일 저장 위치 - 실제 서버의 파일 위치
+		path = context.getRealPath("/resources/upload/");
+
+		// 설정한 경로에 폴더가 없을 때 폴더 생성
+		File dir = new File(path);
+		if (dir.exists()) {
+			dir.mkdir();
+		}
+
+		if (!file.isEmpty()) { // 첨부파일이 존재하는 경우
+			// 기존에 저장된 파일 삭제하기
+			File oldFile = new File(path + bdao.getFileName(map));
+			if(oldFile.exists()) {
+				oldFile.delete();
+				System.out.println("기존파일 삭제완료");
+			}
+			
+			// 파일명 중복 안되게 수정(UUID방식)
+			String saveFileName = uploadFile(fileName, file.getBytes());
+
+			file.transferTo(new File(path + saveFileName));
+
+			map.put("bm_file", fileName);
+			map.put("bm_savedfile", saveFileName);
+			map.put("bm_filepath", path + saveFileName);
+
+			bdao.modifyPost(map);
+		} else { // 첨부파일이 없는 경우
+			map.put("bm_file", "");
+			map.put("bm_savedfile", "");
+			map.put("bm_filepath", "");
+
+			bdao.modifyPost(map);
+		}
+	}
+
+	public void deletePost(String pageName, String bmNum) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pageName", pageName);
+		map.put("bmNum", bmNum);
+		
+		bdao.deletePost(map);
+	}
+
 }// BoardService 끝

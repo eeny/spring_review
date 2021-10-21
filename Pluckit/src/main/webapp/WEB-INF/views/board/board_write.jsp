@@ -151,26 +151,36 @@
 							<tr>
 								<th>제목</th>
 								<td>
-									<input type="text" name="bm_title" id="bmTitle">
+									<input type="text" name="bm_title" id="bmTitle" value="${post.bm_title }">
 								</td>
 							</tr>
 							<tr>
 								<th>첨부파일</th>
 								<td>
+									<c:if test="${post ne null && post.bm_file ne '' }">
+										기존 파일 - ${post.bm_file }
+									</c:if>
 									<label for="bmFile"><i class="fas fa-paperclip"></i> 업로드할 파일 선택 (파일은 1개만 업로드 가능)</label>
 									<input type="file" name="bm_file" id="bmFile">
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="textAreaTd">
-									<textarea name="bm_content" id="bm_content" rows="10"></textarea>
+									<textarea name="bm_content" id="bm_content" rows="10">${post.bm_content }</textarea>
 								</td>
 							</tr>
 						</table>
 
 						<div class="buttons">
 							<!--글쓰기 버튼들 시작-->
-							<a class="write" onclick="writeBoard()">저장</a>
+							<c:choose>
+								<c:when test="${post eq null }">
+									<a class="write" onclick="writeBoard()">저장</a>									
+								</c:when>
+								<c:when test="${post ne null }">
+									<a class="write" onclick="modifyBoard()">수정</a>								
+								</c:when>
+							</c:choose>
 							<a class="write cancel" onclick="cancelBoard()">취소</a>
 						</div>
 						<!--글쓰기 버튼들 끝-->
@@ -327,6 +337,27 @@
 				fileLabel.text(fileName + " (파일을 변경하려면 클릭)");
 			});
 		});
+		
+		// 게시글 수정하기
+		function modifyBoard() {
+			if (title.value.trim().length <= 0) {
+				toastr.warning("제목을 입력해주세요");
+				title.focus();
+				return false;
+			} else if (CKEDITOR.instances.bm_content.getData().length <= 0) {
+				toastr.warning("내용을 입력해주세요");
+				CKEDITOR.instances.bm_content.focus();
+				return false;
+			} else {
+				bId.value = getParam("pageName");
+				bdForm.action = "ModifyPostProc.do?deptName="
+						+ getParam("deptName") + "&empAuth="
+						+ getParam("empAuth") + "&pageName="
+						+ getParam("pageName") + "&bmNum="
+						+ getParam("bmNum");
+				bdForm.submit();
+			}
+		}
 	</script>
 
 </body>

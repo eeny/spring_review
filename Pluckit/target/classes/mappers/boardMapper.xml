@@ -122,5 +122,33 @@
 			bm_num = #{bmNum}
 	</select>
 	
+	<!-- 수정전 기존 첨부파일명 가져오기 -->
+	<select id="getFileName" parameterType="HashMap" resultType="String">
+		SELECT 
+			bm_savedfile 
+		FROM 
+			board_main_${b_id}
+		WHERE 
+			bm_num = #{bm_num}
+	</select>
 	
+	<!-- 게시글 수정하기 -->
+	<update id="modifyPost" parameterType="HashMap">
+		UPDATE board_main_${b_id}
+		SET
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath}
+		WHERE bm_num = #{bm_num}
+	</update>
+	
+	<!-- 게시글 삭제하기 -->
+	<delete id="deletePost" parameterType="HashMap">
+		DELETE FROM board_main_${pageName} 
+		WHERE 
+			bm_num = #{bmNum}
+	</delete>
 </mapper>
