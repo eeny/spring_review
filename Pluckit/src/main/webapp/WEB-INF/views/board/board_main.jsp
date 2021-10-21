@@ -6,7 +6,7 @@
 <html lang="ko">
 
 <head>
-<title>관리자메뉴 - 게시판 관리</title>
+<title>게시판</title>
 <!-- CSS 파일 -->
 <link rel="stylesheet" href="resources/css/board_main.css">
 <!-- Font Awesome -->
@@ -193,10 +193,10 @@
 										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'pptx'}">
 											<i class="fas fa-file-powerpoint"></i>
 										</c:when>
-										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'doc'}">
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'docx'}">
 											<i class="fas fa-file-word"></i>
 										</c:when>
-										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'xls'}">
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'xlsx'}">
 											<i class="fas fa-file-excel"></i>
 										</c:when>
 										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'pdf'}">
@@ -205,7 +205,7 @@
 										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'hwp' || fn:split(bdto.bm_file, '.')[1] eq  'txt'}">
 											<i class="fas fa-file-alt"></i>
 										</c:when>
-										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'zip'}">
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'zip'|| fn:split(bdto.bm_file, '.')[1] eq  'war'}">
 											<i class="fas fa-file-archive"></i>
 										</c:when>
 										<c:otherwise>

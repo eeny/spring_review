@@ -39,5 +39,13 @@ public class BoardDAO {
 		return sqlSession.selectOne("board.getAllBoardCount", pageName);
 	}
 	
+	public int updateHitCount(HashMap<String, String> map) {
+		return sqlSession.update("board.updateHitCount", map);
+	}
+
+	public BoardMainDTO getPost(HashMap<String, String> map) {
+		return sqlSession.selectOne("board.getPost", map);
+	}
+	
 	
 }

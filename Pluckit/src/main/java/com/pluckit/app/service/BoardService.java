@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +20,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.pluckit.app.dao.BoardDAO;
 import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.BoardMainDTO;
+import com.pluckit.util.DownloadView;
 
 @Service
 public class BoardService {
 	@Autowired
 	private BoardDAO bdao;
-	
+
 	private String path; // 파일 업로드시 사용될 변수
 
 	public List<BoardDTO> getAllBoardTitle(String deptName) {
@@ -39,7 +43,7 @@ public class BoardService {
 
 	public void writePostProc(ServletContext context, MultipartHttpServletRequest mrequest) throws IOException {
 		HashMap<String, String> map = new HashMap<>();
-		
+
 		// 파일을 제외한 나머지 값
 		String b_id = mrequest.getParameter("b_id");
 		String bm_writer = mrequest.getParameter("bm_writer");
@@ -48,42 +52,42 @@ public class BoardService {
 
 		MultipartFile file = mrequest.getFile("bm_file"); // 넘어온 파일 객체
 		String fileName = file.getOriginalFilename(); // 파일 객체 이름 갖고오기
-		
+
 		map.put("b_id", b_id);
 		map.put("bm_writer", bm_writer);
 		map.put("bm_title", bm_title);
 		map.put("bm_content", bm_content);
-		
+
 		// 파일 저장 위치 - 실제 서버의 파일 위치
 		path = context.getRealPath("/resources/upload/");
-		
+
 		// 설정한 경로에 폴더가 없을 때 폴더 생성
 		File dir = new File(path);
 		if (dir.exists()) {
 			dir.mkdir();
 		}
-		
+
 		if (!file.isEmpty()) { // 첨부파일이 존재하는 경우
 			// 파일명 중복 안되게 수정(UUID방식)
 			String saveFileName = uploadFile(fileName, file.getBytes());
-			
+
 			file.transferTo(new File(path + saveFileName));
-			
+
 			map.put("bm_file", fileName);
 			map.put("bm_savedfile", saveFileName);
-			map.put("bm_filepath", path+saveFileName);
-			
+			map.put("bm_filepath", path + saveFileName);
+
 			bdao.writePostProc(map);
 		} else { // 첨부파일이 없는 경우
 			map.put("bm_file", "");
 			map.put("bm_savedfile", "");
 			map.put("bm_filepath", "");
-			
+
 			bdao.writePostProc(map);
 		}
-		
+
 	}
-	
+
 	public List<BoardMainDTO> getAllBoardList(String pageName, int offset, int pageSize) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("pageName", pageName);
@@ -91,8 +95,6 @@ public class BoardService {
 		map.put("pageSize", Integer.toString(pageSize));
 		return bdao.getAllBoardList(map);
 	}
-	
-	
 
 	// 파일명 중복 안되게 수정하는 메서드 (UUID방식)
 	private String uploadFile(String originalName, byte[] fileData) throws IOException {
@@ -113,6 +115,33 @@ public class BoardService {
 	public int getAllBoardCount(String pageName) {
 		return bdao.getAllBoardCount(pageName);
 	}
-
 	
+	public void updateHitCount(String pageName, String bmNum) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pageName", pageName);
+		map.put("bmNum", bmNum);
+		bdao.updateHitCount(map);
+	}
+
+	public BoardMainDTO getPost(String pageName, String bmNum) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pageName", pageName);
+		map.put("bmNum", bmNum);
+		return bdao.getPost(map);
+	}
+
+	public void fileDownload(ServletContext context, String bmFile, String bmSFile, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response) {
+		// 파일 경로
+		path = context.getRealPath("/resources/upload/");
+				
+		try {
+			// 파일다운로드 객체 생성
+			DownloadView fileDown = new DownloadView(); 
+			fileDown.fileDown(request, response, path + "/", bmSFile, bmFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }// BoardService 끝

@@ -91,8 +91,36 @@
 			board_main_${value}
 	</select>
 	
+	<!-- 게시글 조회수 증가 -->
+	<update id="updateHitCount" parameterType="HashMap">
+		UPDATE board_main_${pageName}
+		SET 
+			bm_hit = IFNULL(bm_hit,0) + 1
+		WHERE 
+			bm_num = #{bmNum}
+	</update>
 	
-	
+	<!-- 게시글 내용 가져오기 -->
+	<select id="getPost" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT 
+			bm_num,
+			b_id,
+			bm_title,
+			bm_writer,
+			bm_content,
+			bm_regdate,
+			bm_hit,
+			bm_file,
+			bm_savedfile,
+			bm_filepath,
+			bm_grpnum,
+			bm_grpord,
+			bm_grpdepth
+		FROM 
+			board_main_${pageName}
+		WHERE
+			bm_num = #{bmNum}
+	</select>
 	
 	
 </mapper>

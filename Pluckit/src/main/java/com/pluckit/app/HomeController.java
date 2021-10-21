@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import com.pluckit.app.service.AdminService;
 import com.pluckit.app.service.BoardService;
 import com.pluckit.app.service.MainService;
 import com.pluckit.app.service.OfficeService;
+import com.pluckit.util.DownloadView;
 
 @Controller
 public class HomeController {
@@ -317,10 +320,22 @@ public class HomeController {
 
 		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
 		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+
+		// 조회수 증가
+		bsvc.updateHitCount(pageName, bmNum);
 		
-		// *************************** 글 내용 가져오기 만들어야함!!! ****************************
+		model.addAttribute("post", bsvc.getPost(pageName, bmNum));
 
 		return "board/board_read";
+	}
+
+	// [게시판] 게시글 첨부파일 다운로드
+	@RequestMapping("/FileDownload.do")
+	public String fileDownload(String bmFile, String bmSFile, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response, Model model) {
+		bsvc.fileDownload(context, bmFile, bmSFile, session, request, response);
+		
+		return "";
 	}
 
 	// [게시판] 메뉴 글 수정 페이지 이동

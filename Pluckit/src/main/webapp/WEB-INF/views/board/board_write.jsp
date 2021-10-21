@@ -5,7 +5,7 @@
 <html lang="ko">
 
 <head>
-<title>관리자메뉴 - 게시판 관리</title>
+<title>게시판</title>
 <!-- CSS 파일 -->
 <link rel="stylesheet" href="resources/css/board_write.css">
 <!-- CKEditor -->
