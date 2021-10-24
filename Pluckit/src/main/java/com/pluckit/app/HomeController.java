@@ -376,9 +376,12 @@ public class HomeController {
 		return "redirect:/ReadPost.do";
 	}
 
-	// [게시판] 메뉴 글 삭제
+	// [게시판] 메뉴 글 삭제 & 해당 글의 댓글 삭제
 	@RequestMapping("/DeletePostProc.do")
 	public String deletePostProc(String deptName, String empAuth, String pageName, String bmNum, RedirectAttributes redirect) {
+		// 댓글 삭제
+		bsvc.deletePostReply(pageName, bmNum);
+		// 게시글 삭제
 		bsvc.deletePost(pageName, bmNum);
 		
 		// 리다이렉트 시 같이 넘겨야하는 파라미터
@@ -400,25 +403,38 @@ public class HomeController {
 	}
 	
 	// [게시판] 메뉴 댓글 조회
-	@RequestMapping(value = "/GetReplyProc.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/GetReplyProc.do", method = RequestMethod.POST)
 	@ResponseBody
 	public List<BoardReplyDTO> getReplyProc(@RequestBody BoardReplyDTO dto) {
 		return bsvc.getReplyProc(dto);
 	}
 	
+	// [게시판] 메뉴 수정할 댓글 내용 가져오기
+	@RequestMapping(value = "/GetModReply.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, BoardReplyDTO> getModReply(@RequestBody BoardReplyDTO dto) {
+		HashMap<String, BoardReplyDTO> map = new HashMap<>();
+		map.put("result", bsvc.getModReply(dto));
+		return map;
+	}
+	
 	// [게시판] 메뉴 댓글 수정
-	@RequestMapping("/ModifyReplyProc.do")
-	public String modifyReplyProc() {
-		
-		return "";
+	@RequestMapping(value = "/ModifyReplyProc.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, String> modifyReplyProc(@RequestBody BoardReplyDTO dto) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("result", bsvc.modifyReplyProc(dto));
+		return map;
 	}
 	
 	
 	// [게시판] 메뉴 댓글 삭제
-	@RequestMapping("/DeleteReplyProc.do")
-	public String deleteReplyProc() {
-		
-		return "";
+	@RequestMapping(value = "/DeleteReplyProc.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, String> deleteReplyProc(@RequestBody BoardReplyDTO dto) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("result", bsvc.deleteReplyProc(dto));
+		return map;
 	}
 
 	// ===================== 게시판 메뉴 끝 =====================

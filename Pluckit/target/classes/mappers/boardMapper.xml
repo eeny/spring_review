@@ -145,12 +145,19 @@
 		WHERE bm_num = #{bm_num}
 	</update>
 	
+	<!-- 게시글의 댓글 삭제하기 -->
+	<delete id="deletePostReply" parameterType="HashMap">
+		DELETE FROM board_reply_${pageName} 
+		WHERE 
+			bm_num = #{bmNum}
+	</delete>
+
 	<!-- 게시글 삭제하기 -->
 	<delete id="deletePost" parameterType="HashMap">
 		DELETE FROM board_main_${pageName} 
 		WHERE 
 			bm_num = #{bmNum}
-	</delete>
+	</delete>	
 	
 	<!-- 댓글 달기 -->
 	<insert id="writeReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
@@ -183,10 +190,35 @@
 			bm_num = #{bm_num}
 	</select>
 	
+	<!-- 수정할 댓글 내용 가져오기 -->
+	<select id="getModReply" parameterType="com.pluckit.app.dto.BoardReplyDTO" resultType="com.pluckit.app.dto.BoardReplyDTO">
+		SELECT 
+			r_num, 
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate 
+		FROM 
+			board_reply_${b_id}
+		WHERE 
+			r_num = #{r_num}
+	</select>
 	
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		DELETE FROM board_reply_${b_id} 
+		WHERE 
+			r_num = #{r_num}
+	</delete>
 	
-	
-	
+	<!-- 댓글 수정하기 -->
+	<update id="modifyReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		UPDATE board_reply_${b_id}
+		SET 
+			r_content = #{r_content}
+		WHERE 
+			r_num = #{r_num}
+	</update>
 	
 	
 </mapper>

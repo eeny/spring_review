@@ -206,18 +206,6 @@
 						<p class="replyCount"></p>
 
 						<ul class="replyList">
-							<li>
-								<div>
-									<img src="resources/img/user.png" alt="user">
-								</div>
-								<div class="replyContent">
-									<p class="replyTop">
-										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
-										</span>
-									</p>
-									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
-								</div>
-							</li>
 						</ul>
 					</div>
 					<!-- 댓글 끝 -->
@@ -347,28 +335,35 @@
 					r_content : rContent.value,
 					b_id : bId.value
 			}
-			//alert(JSON.stringify(rData));
 			
-			$.ajax({
-				type: "POST",
-				url: "WriteReplyProc.do",
-				data: JSON.stringify(rData),
-				contentType : "application/json; charset=utf-8",
-				dataType : "json",
-				success: function(data) {
-					if (data.result == "success") {
-						getReplyList();
-						rContent.value = "";
+			if (rWriter.value.trim().length <= 0) {
+				toastr.error("로그인 후 이용가능합니다");
+			} else if (rContent.value.trim().length <= 0) {
+				toastr.warning("내용을 입력해주세요");
+			} else {
+				$.ajax({
+					type: "POST",
+					url: "WriteReplyProc.do",
+					data: JSON.stringify(rData),
+					contentType : "application/json; charset=utf-8",
+					dataType : "json",
+					success: function(data) {
+						if (data.result == "success") {
+							getReplyList();
+							rContent.value = "";
+						}
+					},
+					error: function(data) {
+						alert("시스템 에러 발생!");
 					}
-				},
-				error: function(data) {
-					alert("시스템 에러 발생!");
-				}
-			});
+				});				
+			}
+			
 		}
 		
 		// 댓글 목록 가져오기
 		function getReplyList() {
+			var empName = "${empInfo.emp_name }"; // 세션 사용자와 댓글 작성자 비교용
 			var bmNum = document.getElementById("bmNum");
 			var bId = document.getElementById("bId");
 			var param = {
@@ -385,22 +380,38 @@
 				success: function(data) {
 					var str = "";
 					var rCnt = data.length;
-					alert(rCnt);
 					
-					/* if (rCnt > 0) { // 댓글이 존재하는 경우
+					if (rCnt > 0) { // 댓글이 존재하는 경우
 						for (var i = 0; i < rCnt; i++) {
-							str += "<li>";
-							str += "<div>";
-							str += "<img src='resources/img/user.png' alt='user'>";
-							str += "</div>";
-							str += "<div class='replyContent'>";
-							str += "<p class='replyTop'>";
-							str += "<span>" + data[i].r_writer + "</span> <span>" + data[i].r_regdate + "</span>";
-							str += " <span><a href=''>수정</a> <a href=''>삭제</a></span>";
-							str += "</p>";
-							str += "<p class='replyBottom'>" + data[i].r_content + "</p>";
-							str += "</div>";
-							str += "</li>";
+							if (data[i].r_writer == empName) {
+								str += "<li id='rId" + data[i].r_num + "'>";
+								str += "<div>";
+								str += "<img src='resources/img/user.png' alt='user'>";
+								str += "</div>";
+								str += "<div class='replyContent'>";
+								str += "<p class='replyTop'>";
+								str += "<span>" + data[i].r_writer + "</span> <span>" + data[i].r_regdate + "</span>";
+								str += " <span><a onclick='modReplyForm(" + data[i].r_num + ")'>수정</a>";
+								str += " <a onclick='delReply(" + data[i].r_num + ")'>삭제</a></span>";
+								str += "</p>";
+								str += "<p class='replyBottom'>" + data[i].r_content + "</p>";
+								str += "</div>";
+								str += "</li>";						
+							} else {
+								str += "<li id='rId" + data[i].r_num + "'>";
+								str += "<div>";
+								str += "<img src='resources/img/user.png' alt='user'>";
+								str += "</div>";
+								str += "<div class='replyContent'>";
+								str += "<p class='replyTop'>";
+								str += "<span>" + data[i].r_writer + "</span> <span>" + data[i].r_regdate + "</span>";
+								str += " <span style='visibility: hidden;'><a onclick='modReplyForm(" + data[i].r_num + ")'>수정</a>";
+								str += " <a onclick='delReply(" + data[i].r_num + ")'>삭제</a></span>";
+								str += "</p>";
+								str += "<p class='replyBottom'>" + data[i].r_content + "</p>";
+								str += "</div>";
+								str += "</li>";	
+							}
 						}
 					} else {
 						str += "<li><strong>";
@@ -409,7 +420,101 @@
 					}
 					
 					$(".replyCount").html("댓글 (" + rCnt + ")");
-					$(".replyList").html(str); */
+					$(".replyList").html(str);
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
+		
+		// 댓글 수정하기
+		function modReplyForm(rNum) {
+			var bId = document.getElementById("bId");
+			var bmNum = document.getElementById("bmNum");
+			var param = {
+					b_id : bId.value,
+					bm_num : bmNum.value,
+					r_num : rNum
+			}
+			
+			$.ajax({
+				type: "POST",
+				url: "GetModReply.do",
+				data: JSON.stringify(param),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success: function(data) {
+					var str = "";
+					if (data != null) {
+						str += "<li id='rId" + data.result.r_num + "'>";
+						str += "<div><img src='resources/img/user.png' alt='user'></div>";
+						str += "<div class='replyContent'>";
+						str += "<p class='replyTop'>";
+						str += "<span class='rWriter'>" + data.result.r_writer + "</span>";
+						str += "<span>" + data.result.r_regdate + "</span>";
+						str += "<span><a onclick='modReply(" + data.result.r_num + ")'>저장</a>";
+						str += "<a onclick='getReplyList()'>취소</a></span>";
+						str += "</p>";
+						str += "<textarea name='r_content' id='modContent" + data.result.r_num + "'>" + data.result.r_content + "</textarea>";
+						str += "</div></li>";
+						
+						$("#rId" + data.result.r_num).replaceWith(str);
+						$("#rId" + data.result.r_num + " #modContent" + data.result.r_num).focus();
+					}
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
+		
+		// 댓글 수정하기
+		function modReply(rNum) {
+			var bId = $("#bId").val();
+			var rContent = $("#modContent" + rNum).val();
+			
+			var param = {
+					b_id : bId,
+					r_content : rContent,
+					r_num : rNum
+			}
+			
+			$.ajax({
+				type: "POST",
+				url: "ModifyReplyProc.do",
+				data: JSON.stringify(param),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success: function(data) {
+					if (data.result == "success") {
+						getReplyList();
+					}
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
+		
+		// 댓글 삭제하기
+		function delReply(rNum) {
+			var bId = document.getElementById("bId");
+			var param = {
+					b_id : bId.value,
+					r_num : rNum
+			}
+			
+			$.ajax({
+				type: "POST",
+				url: "DeleteReplyProc.do",
+				data: JSON.stringify(param),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success: function(data) {
+					if (data.result == "success") {
+						getReplyList();
+					}
 				},
 				error: function(data) {
 					alert("시스템 에러 발생!");

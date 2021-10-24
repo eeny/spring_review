@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 *, html, body {
 	margin: 0;
 	padding: 0;
@@ -392,4 +390,15 @@ p.replyTop {
 
 .replyTop a:hover {
 	text-decoration: underline;
+}
+/* 댓글 수정시 나타나는 textarea */
+.replyContent textarea {
+	width: 100%;
+	padding: 2px 5px;
+	border: 1px solid #cacaca;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.replyContent textarea:focus {
+	outline: none;
 }

@@ -199,6 +199,14 @@ public class BoardService {
 			bdao.modifyPost(map);
 		}
 	}
+	
+	public void deletePostReply(String pageName, String bmNum) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("pageName", pageName);
+		map.put("bmNum", bmNum);
+		
+		bdao.deletePostReply(map);
+	}
 
 	public void deletePost(String pageName, String bmNum) {
 		HashMap<String, String> map = new HashMap<>();
@@ -220,6 +228,29 @@ public class BoardService {
 
 	public List<BoardReplyDTO> getReplyProc(BoardReplyDTO dto) {
 		return bdao.getReplyProc(dto);
+	}
+	
+	public BoardReplyDTO getModReply(BoardReplyDTO dto) {
+		return bdao.getModReply(dto);
+	}
+
+	public String deleteReplyProc(BoardReplyDTO dto) {
+		int result = bdao.deleteReplyProc(dto);
+		String str = "";
+		if (result > 0) { // delete 된 경우
+			str = "success";
+		}
+		
+		return str;
+	}
+
+	public String modifyReplyProc(BoardReplyDTO dto) {
+		int result = bdao.modifyReplyProc(dto);
+		String str = "";
+		if (result > 0) { // update 된 경우
+			str = "success";
+		}
+		return str;
 	}
 
 	

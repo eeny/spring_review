@@ -55,6 +55,10 @@ public class BoardDAO {
 	public int modifyPost(HashMap<String, String> map) {
 		return sqlSession.update("board.modifyPost", map);
 	}
+	
+	public int deletePostReply(HashMap<String, String> map) {
+		return sqlSession.delete("board.deletePostReply", map);
+	}
 
 	public int deletePost(HashMap<String, String> map) {
 		return sqlSession.delete("board.deletePost", map);
@@ -66,6 +70,18 @@ public class BoardDAO {
 
 	public List<BoardReplyDTO> getReplyProc(BoardReplyDTO dto) {
 		return sqlSession.selectList("board.getReplyProc", dto);
+	}
+	
+	public BoardReplyDTO getModReply(BoardReplyDTO dto) {
+		return sqlSession.selectOne("board.getModReply", dto);
+	}
+
+	public int deleteReplyProc(BoardReplyDTO dto) {
+		return sqlSession.delete("board.deleteReplyProc", dto);
+	}
+
+	public int modifyReplyProc(BoardReplyDTO dto) {
+		return sqlSession.update("board.modifyReplyProc", dto);
 	}
 
 	
