@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.BoardMainDTO;
+import com.pluckit.app.dto.BoardReplyDTO;
 
 @Repository
 public class BoardDAO {
@@ -57,6 +58,14 @@ public class BoardDAO {
 
 	public int deletePost(HashMap<String, String> map) {
 		return sqlSession.delete("board.deletePost", map);
+	}
+
+	public int writeReplyProc(BoardReplyDTO dto) {
+		return sqlSession.insert("board.writeReplyProc", dto);
+	}
+
+	public List<BoardReplyDTO> getReplyProc(BoardReplyDTO dto) {
+		return sqlSession.selectList("board.getReplyProc", dto);
 	}
 
 	

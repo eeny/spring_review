@@ -7,6 +7,9 @@ public class BoardReplyDTO {
 	private String r_content;
 	private String r_regdate;
 	
+	// 실제 테이블에 존재하지 않는 변수
+	private String b_id; // 게시판별 댓글 달기 할 때 사용
+	
 	public int getR_num() {
 		return r_num;
 	}
@@ -36,5 +39,12 @@ public class BoardReplyDTO {
 	}
 	public void setR_regdate(String r_regdate) {
 		this.r_regdate = r_regdate;
+	}
+	
+	public String getB_id() {
+		return b_id;
+	}
+	public void setB_id(String b_id) {
+		this.b_id = b_id;
 	}
 }

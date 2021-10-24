@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.BoardMainDTO;
+import com.pluckit.app.dto.BoardReplyDTO;
 import com.pluckit.app.dto.EmployeeDTO;
 import com.pluckit.app.dto.PagingDTO;
 import com.pluckit.app.service.AdminService;
@@ -386,6 +387,38 @@ public class HomeController {
 		redirect.addAttribute("pageName", pageName);
 
 		return "redirect:/Board.do";
+	}
+	
+	// [게시판] 메뉴 댓글 작성
+	@RequestMapping(value = "/WriteReplyProc.do", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, String> writeReplyProc(@RequestBody BoardReplyDTO dto) {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("result", bsvc.writeReplyProc(dto));
+		
+		return map;
+	}
+	
+	// [게시판] 메뉴 댓글 조회
+	@RequestMapping(value = "/GetReplyProc.do", method = RequestMethod.GET)
+	@ResponseBody
+	public List<BoardReplyDTO> getReplyProc(@RequestBody BoardReplyDTO dto) {
+		return bsvc.getReplyProc(dto);
+	}
+	
+	// [게시판] 메뉴 댓글 수정
+	@RequestMapping("/ModifyReplyProc.do")
+	public String modifyReplyProc() {
+		
+		return "";
+	}
+	
+	
+	// [게시판] 메뉴 댓글 삭제
+	@RequestMapping("/DeleteReplyProc.do")
+	public String deleteReplyProc() {
+		
+		return "";
 	}
 
 	// ===================== 게시판 메뉴 끝 =====================

@@ -619,28 +619,27 @@
 				b_id : bcode
 			}
 
-			$
-					.ajax({
-						type : "post",
-						url : "IsBoardDataExist.do",
-						data : JSON.stringify(bId),
-						contentType : "application/json; charset=utf-8",
-						dataType : "json",
-						success : function(data) {
-							if (data.result > 0) { // 해당 게시판에 데이터가 존재하는 경우
-								DelConfirm(
-										"해당 게시판에 게시글이 존재합니다.<br>게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
-										bcode);
-							} else { // 게시판에 데이터가 없는 경우
-								DelConfirm(
-										"게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
-										bcode);
-							}
-						},
-						error : function(data) {
-							alert("시스템 에러 발생!");
-						}
-					});
+			$.ajax({
+				type : "post",
+				url : "IsBoardDataExist.do",
+				data : JSON.stringify(bId),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success : function(data) {
+					if (data.result > 0) { // 해당 게시판에 데이터가 존재하는 경우
+						DelConfirm(
+								"해당 게시판에 게시글이 존재합니다.<br>게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
+								bcode);
+					} else { // 게시판에 데이터가 없는 경우
+						DelConfirm(
+								"게시판을 삭제하면 복구할 수 없습니다.<br>게시판을 삭제하시겠습니까?",
+								bcode);
+					}
+				},
+				error : function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
 		}
 	</script>
 </body>

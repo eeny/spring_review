@@ -291,7 +291,7 @@ div.replyBox { /* 댓글 작성 부분 */
 	outline: none;
 }
 
-.replyBox input[type='submit'] {
+.replyBox input[type='button'] {
 	width: 90px;
 	height: 75px;
 	border: none;

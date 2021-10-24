@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.pluckit.app.dao.BoardDAO;
 import com.pluckit.app.dto.BoardDTO;
 import com.pluckit.app.dto.BoardMainDTO;
+import com.pluckit.app.dto.BoardReplyDTO;
 import com.pluckit.util.DownloadView;
 
 @Service
@@ -206,5 +207,21 @@ public class BoardService {
 		
 		bdao.deletePost(map);
 	}
+
+	public String writeReplyProc(BoardReplyDTO dto) {
+		int result = bdao.writeReplyProc(dto);
+		String str = "";
+		if (result > 0) { // insert 된 경우
+			str = "success";
+		}	
+		
+		return str;
+	}
+
+	public List<BoardReplyDTO> getReplyProc(BoardReplyDTO dto) {
+		return bdao.getReplyProc(dto);
+	}
+
+	
 
 }// BoardService 끝

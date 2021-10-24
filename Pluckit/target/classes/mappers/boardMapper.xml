@@ -151,4 +151,42 @@
 		WHERE 
 			bm_num = #{bmNum}
 	</delete>
+	
+	<!-- 댓글 달기 -->
+	<insert id="writeReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO">
+		INSERT INTO board_reply_${b_id}
+		(
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate
+		)
+		VALUES (
+			#{bm_num},
+			#{r_writer},
+			#{r_content},
+			NOW()
+		)
+	</insert>
+	
+	<!-- 댓글 가져오기 -->
+	<select id="getReplyProc" parameterType="com.pluckit.app.dto.BoardReplyDTO" resultType="com.pluckit.app.dto.BoardReplyDTO">
+		SELECT 
+			r_num, 
+			bm_num, 
+			r_writer, 
+			r_content, 
+			r_regdate 
+		FROM 
+			board_reply_${b_id}
+		WHERE 
+			bm_num = #{bm_num}
+	</select>
+	
+	
+	
+	
+	
+	
+	
 </mapper>

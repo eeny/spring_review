@@ -193,54 +193,19 @@
 
 					<!-- 댓글 시작 -->
 					<div class="replyWrap">
-						<form action="#" method="post">
+						<form id="replyForm" name="replyForm" method="post">
 							<div class="replyBox">
-								<input type="hidden" name="bm_num" value="">
-								<input type="hidden" name="r_writer" value="">
-								<textarea name="r_content"></textarea>
-								<input type="submit" value="댓글작성">
+								<input type="hidden" name="b_id" id="bId" value="${pageName }">
+								<input type="hidden" name="bm_num" id="bmNum" value="${post.bm_num }">
+								<input type="hidden" name="r_writer" id="rWriter" value="${empInfo.emp_name }">
+								<textarea name="r_content" id="rContent"></textarea>
+								<input type="button" value="댓글작성" onclick="writeReply()">
 							</div>
 						</form>
 
-						<p class="replyCount">댓글 (3)</p>
+						<p class="replyCount"></p>
 
 						<ul class="replyList">
-							<li>
-								<div>
-									<img src="resources/img/user.png" alt="user">
-								</div>
-								<div class="replyContent">
-									<p class="replyTop">
-										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
-										</span>
-									</p>
-									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
-								</div>
-							</li>
-							<li>
-								<div>
-									<img src="resources/img/user.png" alt="user">
-								</div>
-								<div class="replyContent">
-									<p class="replyTop">
-										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
-										</span>
-									</p>
-									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
-								</div>
-							</li>
-							<li>
-								<div>
-									<img src="resources/img/user.png" alt="user">
-								</div>
-								<div class="replyContent">
-									<p class="replyTop">
-										<span>김철수 부장</span> <span>2021-10-22 11:55:33</span> <span> <a href="#">수정</a> <a href="#">삭제</a>
-										</span>
-									</p>
-									<p class="replyBottom">내용입니다ㅏㅏㅏㅏㅏㅏ</p>
-								</div>
-							</li>
 							<li>
 								<div>
 									<img src="resources/img/user.png" alt="user">
@@ -351,7 +316,7 @@
 			titleArray[i].innerText = shortTitle;
 		}
 		
-		// 첨부 이미지 크기 조정
+		// 첨부 이미지 크기 제한
 		function resize(img){
             var imgWidth = img.width;
             var maxWidth = 600;
@@ -362,6 +327,95 @@
             	img.cla
             }
         }
+		
+		// 페이지 로딩시 댓글목록 불러오기
+		$(function() {
+			getReplyList();
+		});
+		
+		// 댓글 등록하기
+		function writeReply() {
+			//var rForm = document.replyForm;
+			var rContent = document.getElementById("rContent");
+			var bmNum = document.getElementById("bmNum");
+			var rWriter = document.getElementById("rWriter");
+			var bId = document.getElementById("bId");
+			
+			var rData = {
+					bm_num : bmNum.value,
+					r_writer : rWriter.value,
+					r_content : rContent.value,
+					b_id : bId.value
+			}
+			//alert(JSON.stringify(rData));
+			
+			$.ajax({
+				type: "POST",
+				url: "WriteReplyProc.do",
+				data: JSON.stringify(rData),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success: function(data) {
+					if (data.result == "success") {
+						getReplyList();
+						rContent.value = "";
+					}
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
+		
+		// 댓글 목록 가져오기
+		function getReplyList() {
+			var bmNum = document.getElementById("bmNum");
+			var bId = document.getElementById("bId");
+			var param = {
+					b_id : bId.value,
+					bm_num : bmNum.value
+			}
+			
+			$.ajax({
+				type: "POST",
+				url: "GetReplyProc.do",
+				data: JSON.stringify(param),
+				contentType : "application/json; charset=utf-8",
+				dataType : "json",
+				success: function(data) {
+					var str = "";
+					var rCnt = data.length;
+					alert(rCnt);
+					
+					/* if (rCnt > 0) { // 댓글이 존재하는 경우
+						for (var i = 0; i < rCnt; i++) {
+							str += "<li>";
+							str += "<div>";
+							str += "<img src='resources/img/user.png' alt='user'>";
+							str += "</div>";
+							str += "<div class='replyContent'>";
+							str += "<p class='replyTop'>";
+							str += "<span>" + data[i].r_writer + "</span> <span>" + data[i].r_regdate + "</span>";
+							str += " <span><a href=''>수정</a> <a href=''>삭제</a></span>";
+							str += "</p>";
+							str += "<p class='replyBottom'>" + data[i].r_content + "</p>";
+							str += "</div>";
+							str += "</li>";
+						}
+					} else {
+						str += "<li><strong>";
+                      	str += "등록된 댓글이 없습니다.";
+                        str += "</strong></li>";
+					}
+					
+					$(".replyCount").html("댓글 (" + rCnt + ")");
+					$(".replyList").html(str); */
+				},
+				error: function(data) {
+					alert("시스템 에러 발생!");
+				}
+			});
+		}
 	</script>
 
 </body>
