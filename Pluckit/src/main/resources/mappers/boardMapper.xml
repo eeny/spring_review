@@ -59,6 +59,24 @@
 			bm_hit = 0
 	</insert>
 	
+	<!-- 게시글에 답변글 관련 정보 추가 입력 -->
+	<update id="updatePostGrpInfo"	parameterType="HashMap">
+		<selectKey keyProperty="bm_num" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(bm_num),1) 
+			FROM 
+				board_main_${b_id}
+		</selectKey>
+		
+		UPDATE board_main_${b_id}
+		SET 
+			bm_grpnum = #{bm_num},
+			bm_grpord = 0,
+			bm_grpdepth = 0
+		WHERE 
+			bm_num = #{bm_num}
+	</update>
+	
 	<!-- 게시글 목록 가져오기 -->
 	<select id="getAllBoardList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
 		SELECT 
@@ -78,7 +96,8 @@
 		FROM 
 			board_main_${pageName}
 		ORDER BY
-			bm_num DESC
+			bm_grpnum DESC, 
+			bm_grpord ASC
 		LIMIT
 			${offset}, ${pageSize}
 	</select>

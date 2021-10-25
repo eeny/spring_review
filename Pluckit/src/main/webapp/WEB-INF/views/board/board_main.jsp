@@ -226,14 +226,22 @@
 									<i class="fas fa-angle-left"></i>
 								</a></span>
 						</c:if>
-						<c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
-							<c:if test="${paging.pageNum eq i }">
-								<span class="nowPage"><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}" class="nowPage">${i }</a></span>
-							</c:if>
-							<c:if test="${paging.pageNum ne i }">
-								<span><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">${i }</a></span>
-							</c:if>
-						</c:forEach>
+						
+						<c:if test="${paging.totalCount < 1 }">
+							<span class="nowPage"><a class="nowPage">1</a></span>
+						</c:if>
+						
+						<c:if test="${paging.totalCount > 0 }">
+							<c:forEach var="i" begin="${paging. startPage}" end="${paging.endPage }" step="1">
+								<c:if test="${paging.pageNum eq i }">
+									<span class="nowPage"><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}" class="nowPage">${i }</a></span>
+								</c:if>
+								<c:if test="${paging.pageNum ne i }">
+									<span><a href="Board.do?pageNum=${i }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">${i }</a></span>
+								</c:if>
+							</c:forEach>							
+						</c:if>
+						
 						<c:if test="${paging.pageNum < paging.totalPage }">
 							<span><a href="Board.do?pageNum=${paging.pageNum+1 }&deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}">
 									<i class="fas fa-angle-right"></i>

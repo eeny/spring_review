@@ -296,7 +296,10 @@ public class HomeController {
 	@RequestMapping("/WritePostProc.do")
 	public String writePostProc(String deptName, String empAuth, String pageName, MultipartHttpServletRequest mrequest,
 			RedirectAttributes redirect) throws IOException {
+		// 게시글 저장
 		bsvc.writePostProc(context, mrequest);
+		// 게시글의 답변 관련 정보 저장
+		bsvc.updatePostGrpInfo(mrequest);
 
 		// 리다이렉트 시 같이 넘겨야하는 파라미터
 		redirect.addAttribute("deptName", deptName);
@@ -378,12 +381,13 @@ public class HomeController {
 
 	// [게시판] 메뉴 글 삭제 & 해당 글의 댓글 삭제
 	@RequestMapping("/DeletePostProc.do")
-	public String deletePostProc(String deptName, String empAuth, String pageName, String bmNum, RedirectAttributes redirect) {
+	public String deletePostProc(String deptName, String empAuth, String pageName, String bmNum,
+			RedirectAttributes redirect) {
 		// 댓글 삭제
 		bsvc.deletePostReply(pageName, bmNum);
 		// 게시글 삭제
 		bsvc.deletePost(pageName, bmNum);
-		
+
 		// 리다이렉트 시 같이 넘겨야하는 파라미터
 		redirect.addAttribute("deptName", deptName);
 		redirect.addAttribute("empAuth", empAuth);
@@ -391,24 +395,24 @@ public class HomeController {
 
 		return "redirect:/Board.do";
 	}
-	
+
 	// [게시판] 메뉴 댓글 작성
 	@RequestMapping(value = "/WriteReplyProc.do", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, String> writeReplyProc(@RequestBody BoardReplyDTO dto) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("result", bsvc.writeReplyProc(dto));
-		
+
 		return map;
 	}
-	
+
 	// [게시판] 메뉴 댓글 조회
 	@RequestMapping(value = "/GetReplyProc.do", method = RequestMethod.POST)
 	@ResponseBody
 	public List<BoardReplyDTO> getReplyProc(@RequestBody BoardReplyDTO dto) {
 		return bsvc.getReplyProc(dto);
 	}
-	
+
 	// [게시판] 메뉴 수정할 댓글 내용 가져오기
 	@RequestMapping(value = "/GetModReply.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -417,7 +421,7 @@ public class HomeController {
 		map.put("result", bsvc.getModReply(dto));
 		return map;
 	}
-	
+
 	// [게시판] 메뉴 댓글 수정
 	@RequestMapping(value = "/ModifyReplyProc.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -426,8 +430,7 @@ public class HomeController {
 		map.put("result", bsvc.modifyReplyProc(dto));
 		return map;
 	}
-	
-	
+
 	// [게시판] 메뉴 댓글 삭제
 	@RequestMapping(value = "/DeleteReplyProc.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -435,6 +438,45 @@ public class HomeController {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("result", bsvc.deleteReplyProc(dto));
 		return map;
+	}
+
+	// [게시판] 메뉴 답글 작성 페이지로 이동
+	@RequestMapping("/AnswerPost.do")
+	public String answerPost(String deptName, String empAuth, String pageName, String bmNum, 
+			String bmGrpnum, String bmGrpord, String bmGrpdepth, Model model) {
+		// 왼쪽 세부 메뉴 목록 가져오기
+		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
+			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));
+		} else {
+			model.addAttribute("menuList", bsvc.getAllBoardTitle());
+		}
+
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+
+		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
+		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+
+		// 답변 게시판 구별하기 (작성 버튼을 답글달기 버튼으로 변경)
+		String answer = "answer";
+		model.addAttribute("answer", answer);
+
+		return "board/board_write";
+	}
+	
+	// [게시판] 메뉴 답글 작성 처리
+	@RequestMapping("/AnswerPostProc.do")
+	public String answerPostProc(String deptName, String empAuth, String pageName, String bmNum, Model model, 
+			RedirectAttributes redirect) {
+		// ************* 처리 구문 작성 ***************
+		
+		
+		// 리다이렉트 시 같이 넘겨야하는 파라미터
+		redirect.addAttribute("deptName", deptName);
+		redirect.addAttribute("empAuth", empAuth);
+		redirect.addAttribute("pageName", pageName);
+
+		return "redirect:/Board.do";
 	}
 
 	// ===================== 게시판 메뉴 끝 =====================

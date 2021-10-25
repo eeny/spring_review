@@ -181,7 +181,7 @@
 
 						<div class="buttons">
 							<!--글쓰기 버튼들 시작-->
-							<a class="write">답글</a>
+							<a class="write" href="AnswerPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${post.bm_num}&bmGrpnum=${post.bm_grpnum}&bmGrpord=${post.bm_grpord}&bmGrpdepth=${post.bm_grpdepth}">답글</a>
 							<c:if test="${empInfo.emp_auth eq 5 || empInfo.emp_name eq post.bm_writer }">
 								<a class="write" href="ModifyPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${post.bm_num}">수정</a>
 								<a class="write" onclick="DelConfirm('글을 삭제하시겠습니까?', '${empInfo.deptName }', '${empInfo.emp_auth }', '${pageName}', '${post.bm_num}')">삭제</a>

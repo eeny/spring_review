@@ -89,6 +89,14 @@ public class BoardService {
 
 	}
 
+	public void updatePostGrpInfo(MultipartHttpServletRequest mrequest) {
+		HashMap<String, String> map = new HashMap<>();
+		String bId = mrequest.getParameter("b_id");
+		map.put("b_id", bId);
+		map.put("bm_num", ""); // selectkey에서 사용될 변수
+		bdao.updatePostGrpInfo(map);
+	}
+
 	public List<BoardMainDTO> getAllBoardList(String pageName, int offset, int pageSize) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("pageName", pageName);
@@ -252,6 +260,7 @@ public class BoardService {
 		}
 		return str;
 	}
+
 
 	
 

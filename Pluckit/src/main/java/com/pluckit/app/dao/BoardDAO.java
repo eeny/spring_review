@@ -31,6 +31,10 @@ public class BoardDAO {
 	public int writePostProc(HashMap<String, String> map) {
 		return sqlSession.insert("board.writePostProc", map);
 	}
+	
+	public int updatePostGrpInfo(HashMap<String, String> map) {
+		return sqlSession.update("board.updatePostGrpInfo", map);
+	}
 
 	public List<BoardMainDTO> getAllBoardList(HashMap<String, String> map) {
 		return sqlSession.selectList("board.getAllBoardList", map);
@@ -83,6 +87,8 @@ public class BoardDAO {
 	public int modifyReplyProc(BoardReplyDTO dto) {
 		return sqlSession.update("board.modifyReplyProc", dto);
 	}
+
+	
 
 	
 	

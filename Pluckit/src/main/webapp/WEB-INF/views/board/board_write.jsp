@@ -174,11 +174,14 @@
 						<div class="buttons">
 							<!--글쓰기 버튼들 시작-->
 							<c:choose>
-								<c:when test="${post eq null }">
+								<c:when test="${post eq null && answer eq null }">
 									<a class="write" onclick="writeBoard()">저장</a>									
 								</c:when>
 								<c:when test="${post ne null }">
 									<a class="write" onclick="modifyBoard()">수정</a>								
+								</c:when>
+								<c:when test="${post eq null && answer ne null }">
+									<a class="write" onclick="writeAnswer()">답글저장</a>									
 								</c:when>
 							</c:choose>
 							<a class="write cancel" onclick="cancelBoard()">취소</a>
@@ -355,6 +358,27 @@
 						+ getParam("empAuth") + "&pageName="
 						+ getParam("pageName") + "&bmNum="
 						+ getParam("bmNum");
+				bdForm.submit();
+			}
+		}
+		
+		// 게시글 답글 달기
+		function writeAnswer() {
+			if (title.value.trim().length <= 0) {
+				toastr.warning("제목을 입력해주세요");
+				title.focus();
+				return false;
+			} else if (CKEDITOR.instances.bm_content.getData().length <= 0) {
+				toastr.warning("내용을 입력해주세요");
+				CKEDITOR.instances.bm_content.focus();
+				return false;
+			} else {
+				bId.value = getParam("pageName");
+				bdForm.action = "AnswerPostProc.do?deptName="
+					+ getParam("deptName") + "&empAuth="
+					+ getParam("empAuth") + "&pageName="
+					+ getParam("pageName") + "&bmNum="
+					+ getParam("bmNum");
 				bdForm.submit();
 			}
 		}
