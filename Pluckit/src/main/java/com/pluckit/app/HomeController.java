@@ -496,8 +496,23 @@ public class HomeController {
 		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
 		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
 		
-		// 검색어 처리
+		// 검색 조건
+		HashMap<String, String> map = new HashMap<>();
+		map.put("select", select);
+		map.put("search", search);
+		map.put("pageName", pageName);
 		
+		// 총 게시글 개수, 페이징 처리
+		int totalCount = bsvc.getSearchPostCount(map);
+		PagingDTO pDto = new PagingDTO(Integer.parseInt(pNum), 10, totalCount, 3);
+		
+		map.put("offset", Integer.toString(pDto.getOffset()));
+		map.put("pageSize", Integer.toString(pDto.getPageSize()));
+		
+		List<BoardMainDTO> boardList = bsvc.searchPostList(map);
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", pDto);
 		
 		return "board/board_main";
 	}

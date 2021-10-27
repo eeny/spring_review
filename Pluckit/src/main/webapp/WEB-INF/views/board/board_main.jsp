@@ -140,7 +140,10 @@
 
 					<!--검색 box 추가-->
 
-					<form action="#">
+					<form action="SearchPostList.do">
+						<input type="hidden" name="deptName" value="${empInfo.deptName }">
+						<input type="hidden" name="empAuth" value="${empInfo.emp_auth }">
+						<input type="hidden" name="pageName" value="${pageName }">
 						<table class="search-box">
 							<tr>
 								<td>
@@ -148,7 +151,7 @@
 										<option value="bm_title">제목</option>
 										<option value="bm_writer">작성자</option>
 									</select>
-									<input type="text" placeholder="검색어를 입력하세요">
+									<input type="text" name="search" placeholder="검색어를 입력하세요">
 									<button type="submit">
 										<i class="fas fa-search"></i>
 									</button>

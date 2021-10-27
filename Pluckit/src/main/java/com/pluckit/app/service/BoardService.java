@@ -297,4 +297,12 @@ public class BoardService {
 		return str;
 	}
 
+	public int getSearchPostCount(HashMap<String, String> map) {
+		return bdao.getSearchPostCount(map);
+	}
+
+	public List<BoardMainDTO> searchPostList(HashMap<String, String> map) {
+		return bdao.searchPostList(map);
+	}
+
 }// BoardService 끝

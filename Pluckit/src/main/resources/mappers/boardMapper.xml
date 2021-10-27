@@ -345,4 +345,46 @@
 			bm_grpdepth = (#{bmGrpdepth} + 1)
 	</insert>
 	
+	<!-- 검색 게시글 총 개수 -->
+	<select id="getSearchPostCount" parameterType="HashMap" resultType="int">
+		SELECT 
+			COUNT(bm_num)
+		FROM 
+			board_main_${pageName}
+		WHERE
+			${select} LIKE CONCAT('%', #{search}, '%')
+	</select>
+	
+	<!-- 게시글 검색하기 -->
+	<select id="searchPostList" parameterType="HashMap" resultType="com.pluckit.app.dto.BoardMainDTO">
+		SELECT 
+			bm_num,
+			b_id,
+			bm_title,
+			bm_writer,
+			bm_content,
+			bm_regdate,
+			bm_hit,
+			bm_file,
+			bm_savedfile,
+			bm_filepath,
+			bm_grpnum,
+			bm_grpord,
+			bm_grpdepth
+		FROM 
+			board_main_${pageName}
+		WHERE
+			${select} LIKE CONCAT('%', #{search}, '%')
+		ORDER BY
+			bm_grpnum DESC, 
+			bm_grpord ASC
+		LIMIT
+			${offset}, ${pageSize}
+	</select>
+	
+	
+	
+	
+	
+	
 </mapper>

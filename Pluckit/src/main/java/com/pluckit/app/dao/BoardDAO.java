@@ -108,6 +108,14 @@ public class BoardDAO {
 		return sqlSession.insert("board.insertOtherAnswer", map);
 	}
 
+	public int getSearchPostCount(HashMap<String, String> map) {
+		return sqlSession.selectOne("board.getSearchPostCount", map);
+	}
+
+	public List<BoardMainDTO> searchPostList(HashMap<String, String> map) {
+		return sqlSession.selectList("board.searchPostList", map);
+	}
+
 	
 
 	
