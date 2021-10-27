@@ -266,6 +266,9 @@ table.noticeTable { /*테이블*/
 .noticeTable td:nth-child(2) { /* 제목 컬럼 */
 	text-align: left;
 	padding-left: 15px;
+}
+
+.noticeTable td:nth-child(2) a { /* 제목 컬럼 */
 	color: #0382c2;
 }
 

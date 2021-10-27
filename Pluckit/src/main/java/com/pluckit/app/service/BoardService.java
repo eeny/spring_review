@@ -42,7 +42,8 @@ public class BoardService {
 		return bdao.getBoardTitle(pageName);
 	}
 
-	public void writePostProc(ServletContext context, MultipartHttpServletRequest mrequest) throws IOException {
+	public void writePostProc(ServletContext context, MultipartHttpServletRequest mrequest, String bmNum,
+			String bmGrpnum, String bmGrpord, String bmGrpdepth) throws IOException {
 		HashMap<String, String> map = new HashMap<>();
 
 		// 파일을 제외한 나머지 값
@@ -58,6 +59,12 @@ public class BoardService {
 		map.put("bm_writer", bm_writer);
 		map.put("bm_title", bm_title);
 		map.put("bm_content", bm_content);
+
+		// 답글에 사용될 값
+		map.put("bmGrpnum", bmGrpnum);
+		map.put("bmGrpord", bmGrpord);
+		map.put("bmGrpdepth", bmGrpdepth);
+		map.put("grpOrd", ""); // selectkey에 사용될 변수
 
 		// 파일 저장 위치 - 실제 서버의 파일 위치
 		path = context.getRealPath("/resources/upload/");
@@ -78,13 +85,45 @@ public class BoardService {
 			map.put("bm_savedfile", saveFileName);
 			map.put("bm_filepath", path + saveFileName);
 
-			bdao.writePostProc(map);
+			if (Integer.parseInt(bmNum) == 0) { // 일반 글작성
+				bdao.writePostProc(map);
+			} else { // 답글 작성
+				map.put("bmNum", bmNum);
+
+				// 몇번째 답글인지 확인
+				int minBmGrpord = bdao.getMinBmGrpOrd(map);
+
+				if (minBmGrpord < 1) { // 첫번째 답글인 경우
+					bdao.insertFirstAnswer(map);
+				} else { // 첫번째 답글이 아닌 경우
+					int insert = bdao.insertOtherAnswer(map);
+					if (insert > 0) {
+						bdao.updateOtherAnswer(map);
+					}
+				}
+			}
 		} else { // 첨부파일이 없는 경우
 			map.put("bm_file", "");
 			map.put("bm_savedfile", "");
 			map.put("bm_filepath", "");
 
-			bdao.writePostProc(map);
+			if (Integer.parseInt(bmNum) == 0) { // 일반 글작성
+				bdao.writePostProc(map);
+			} else { // 답글 작성
+				map.put("bmNum", bmNum);
+
+				// 몇번째 답글인지 확인
+				int minBmGrpord = bdao.getMinBmGrpOrd(map);
+
+				if (minBmGrpord < 1) { // 첫번째 답글인 경우
+					bdao.insertFirstAnswer(map);
+				} else { // 첫번째 답글이 아닌 경우
+					int insert = bdao.insertOtherAnswer(map);
+					if (insert > 0) {
+						bdao.updateOtherAnswer(map);
+					}
+				}
+			}
 		}
 
 	}
@@ -124,7 +163,7 @@ public class BoardService {
 	public int getAllBoardCount(String pageName) {
 		return bdao.getAllBoardCount(pageName);
 	}
-	
+
 	public void updateHitCount(String pageName, String bmNum) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("pageName", pageName);
@@ -143,17 +182,18 @@ public class BoardService {
 			HttpServletRequest request, HttpServletResponse response) {
 		// 파일 경로
 		path = context.getRealPath("/resources/upload/");
-				
+
 		try {
 			// 파일다운로드 객체 생성
-			DownloadView fileDown = new DownloadView(); 
+			DownloadView fileDown = new DownloadView();
 			fileDown.fileDown(request, response, path + "/", bmSFile, bmFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void modifyPost(ServletContext context, MultipartHttpServletRequest mrequest, String bmNum) throws IOException {
+	public void modifyPost(ServletContext context, MultipartHttpServletRequest mrequest, String bmNum)
+			throws IOException {
 		HashMap<String, String> map = new HashMap<>();
 
 		// 파일을 제외한 나머지 값
@@ -184,11 +224,11 @@ public class BoardService {
 		if (!file.isEmpty()) { // 첨부파일이 존재하는 경우
 			// 기존에 저장된 파일 삭제하기
 			File oldFile = new File(path + bdao.getFileName(map));
-			if(oldFile.exists()) {
+			if (oldFile.exists()) {
 				oldFile.delete();
 				System.out.println("기존파일 삭제완료");
 			}
-			
+
 			// 파일명 중복 안되게 수정(UUID방식)
 			String saveFileName = uploadFile(fileName, file.getBytes());
 
@@ -200,19 +240,15 @@ public class BoardService {
 
 			bdao.modifyPost(map);
 		} else { // 첨부파일이 없는 경우
-			map.put("bm_file", "");
-			map.put("bm_savedfile", "");
-			map.put("bm_filepath", "");
-
-			bdao.modifyPost(map);
+			bdao.modifyPostNotFile(map);
 		}
 	}
-	
+
 	public void deletePostReply(String pageName, String bmNum) {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("pageName", pageName);
 		map.put("bmNum", bmNum);
-		
+
 		bdao.deletePostReply(map);
 	}
 
@@ -220,7 +256,7 @@ public class BoardService {
 		HashMap<String, String> map = new HashMap<>();
 		map.put("pageName", pageName);
 		map.put("bmNum", bmNum);
-		
+
 		bdao.deletePost(map);
 	}
 
@@ -229,15 +265,15 @@ public class BoardService {
 		String str = "";
 		if (result > 0) { // insert 된 경우
 			str = "success";
-		}	
-		
+		}
+
 		return str;
 	}
 
 	public List<BoardReplyDTO> getReplyProc(BoardReplyDTO dto) {
 		return bdao.getReplyProc(dto);
 	}
-	
+
 	public BoardReplyDTO getModReply(BoardReplyDTO dto) {
 		return bdao.getModReply(dto);
 	}
@@ -248,7 +284,7 @@ public class BoardService {
 		if (result > 0) { // delete 된 경우
 			str = "success";
 		}
-		
+
 		return str;
 	}
 
@@ -260,8 +296,5 @@ public class BoardService {
 		}
 		return str;
 	}
-
-
-	
 
 }// BoardService 끝

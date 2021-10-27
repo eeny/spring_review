@@ -151,7 +151,7 @@
 			bm_num = #{bm_num}
 	</select>
 	
-	<!-- 게시글 수정하기 -->
+	<!-- 게시글 수정하기 (새파일 첨부) -->
 	<update id="modifyPost" parameterType="HashMap">
 		UPDATE board_main_${b_id}
 		SET
@@ -161,6 +161,16 @@
 			bm_file = #{bm_file},
 			bm_savedfile = #{bm_savedfile},
 			bm_filepath = #{bm_filepath}
+		WHERE bm_num = #{bm_num}
+	</update>
+	
+	<!-- 게시글 수정하기 (기존파일 유지) -->
+	<update id="modifyPostNotFile" parameterType="HashMap">
+		UPDATE board_main_${b_id}
+		SET
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content}
 		WHERE bm_num = #{bm_num}
 	</update>
 	
@@ -239,5 +249,100 @@
 			r_num = #{r_num}
 	</update>
 	
+	<!-- 답글 달기 (몇번째 답글인지 체크) -->
+	<select id="getMinBmGrpOrd" parameterType="HashMap" resultType="int">
+		SELECT 
+			IFNULL(MIN(bm_grpord),0)
+		FROM 
+			board_main_${b_id}
+		WHERE 
+			bm_grpnum = #{bmGrpnum}
+		AND 
+			<![CDATA[bm_grpord > #{bmGrpord}]]>
+		AND 
+			<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+	</select>
+	
+	<!-- 답글 달기 (첫번째 답글) -->
+	<insert id="insertFirstAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MAX(bm_grpord),0)+1 
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmNum}
+		</selectKey>
+		
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0,
+			bm_grpnum = #{bmGrpnum},
+			bm_grpord = #{grpOrd},
+			bm_grpdepth = (#{bmGrpdepth} + 1)
+	</insert>
+	
+	<!-- 답글 달기 전 변경 (첫번째가 아닌 답글) -->
+	<update id="updateOtherAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MIN(bm_grpord),0)
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmGrpnum}
+			AND 
+				<![CDATA[bm_grpord > #{bmGrpord}]]>
+			AND 
+				<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+		</selectKey>
+		
+		UPDATE board_main_${b_id}
+		SET 
+			bm_grpord = (bm_grpord + 1)
+		WHERE 
+			<![CDATA[bm_grpnum = ${bmGrpnum}]]>
+		AND 
+			<![CDATA[bm_grpord >= #{grpOrd}]]>
+	</update>
+	
+	<!-- 답글 달기 (첫번째가 아닌 답글) -->
+	<insert id="insertOtherAnswer" parameterType="HashMap">
+		<selectKey keyProperty="grpOrd" resultType="int" order="BEFORE">
+			SELECT 
+				IFNULL(MIN(bm_grpord),0)
+			FROM 
+				board_main_${b_id}
+			WHERE 
+				bm_grpnum = #{bmGrpnum}
+			AND 
+				<![CDATA[bm_grpord > #{bmGrpord}]]>
+			AND 
+				<![CDATA[bm_grpdepth <= #{bmGrpdepth}]]>
+		</selectKey>
+		
+		INSERT INTO board_main_${b_id} 
+		SET 
+			b_id = #{b_id},
+			bm_title = #{bm_title},
+			bm_writer = #{bm_writer},
+			bm_content = #{bm_content},
+			bm_regdate = NOW(),
+			bm_file = #{bm_file},
+			bm_savedfile = #{bm_savedfile},
+			bm_filepath = #{bm_filepath},
+			bm_hit = 0,
+			bm_grpnum = #{bmGrpnum},
+			bm_grpord = (#{grpOrd} - 1),
+			bm_grpdepth = (#{bmGrpdepth} + 1)
+	</insert>
 	
 </mapper>

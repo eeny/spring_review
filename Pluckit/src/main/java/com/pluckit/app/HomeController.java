@@ -297,7 +297,7 @@ public class HomeController {
 	public String writePostProc(String deptName, String empAuth, String pageName, MultipartHttpServletRequest mrequest,
 			RedirectAttributes redirect) throws IOException {
 		// 게시글 저장
-		bsvc.writePostProc(context, mrequest);
+		bsvc.writePostProc(context, mrequest, "0", "0", "0", "0");
 		// 게시글의 답변 관련 정보 저장
 		bsvc.updatePostGrpInfo(mrequest);
 
@@ -442,8 +442,8 @@ public class HomeController {
 
 	// [게시판] 메뉴 답글 작성 페이지로 이동
 	@RequestMapping("/AnswerPost.do")
-	public String answerPost(String deptName, String empAuth, String pageName, String bmNum, 
-			String bmGrpnum, String bmGrpord, String bmGrpdepth, Model model) {
+	public String answerPost(String deptName, String empAuth, String pageName, String bmNum, String bmGrpnum,
+			String bmGrpord, String bmGrpdepth, Model model) {
 		// 왼쪽 세부 메뉴 목록 가져오기
 		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
 			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));
@@ -463,20 +463,43 @@ public class HomeController {
 
 		return "board/board_write";
 	}
-	
+
 	// [게시판] 메뉴 답글 작성 처리
 	@RequestMapping("/AnswerPostProc.do")
-	public String answerPostProc(String deptName, String empAuth, String pageName, String bmNum, Model model, 
-			RedirectAttributes redirect) {
-		// ************* 처리 구문 작성 ***************
-		
-		
+	public String answerPostProc(String deptName, String empAuth, String pageName, String bmNum, String bmGrpnum,
+			String bmGrpord, String bmGrpdepth, MultipartHttpServletRequest mrequest, RedirectAttributes redirect)
+			throws IOException {
+		bsvc.writePostProc(context, mrequest, bmNum, bmGrpnum, bmGrpord, bmGrpdepth);
+
 		// 리다이렉트 시 같이 넘겨야하는 파라미터
 		redirect.addAttribute("deptName", deptName);
 		redirect.addAttribute("empAuth", empAuth);
 		redirect.addAttribute("pageName", pageName);
 
 		return "redirect:/Board.do";
+	}
+
+	// [게시판] 메뉴 검색 처리
+	@RequestMapping("/SearchPostList.do")
+	public String searchPostList(@RequestParam(value = "pageNum", required = false, defaultValue = "1") String pNum,
+			String deptName, String empAuth, String pageName, Model model, String select, String search) {
+		// 왼쪽 세부 메뉴 목록 가져오기
+		if (Integer.parseInt(empAuth) < 5) { // 관리자 권한이 아닌 경우
+			model.addAttribute("menuList", bsvc.getAllBoardTitle(deptName));
+		} else {
+			model.addAttribute("menuList", bsvc.getAllBoardTitle());
+		}
+
+		// 세부 메뉴 클릭시 클래스 적용할 때 사용될 변수
+		model.addAttribute("pageName", pageName);
+
+		// 어떤 게시판인지 구별하기 (아이콘 옆의 제목)
+		model.addAttribute("pageTitle", bsvc.getBoardTitle(pageName));
+		
+		// 검색어 처리
+		
+		
+		return "board/board_main";
 	}
 
 	// ===================== 게시판 메뉴 끝 =====================

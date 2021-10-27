@@ -378,7 +378,10 @@
 					+ getParam("deptName") + "&empAuth="
 					+ getParam("empAuth") + "&pageName="
 					+ getParam("pageName") + "&bmNum="
-					+ getParam("bmNum");
+					+ getParam("bmNum") + "&bmGrpnum="
+					+ getParam("bmGrpnum") + "&bmGrpord="
+					+ getParam("bmGrpord") + "&bmGrpdepth="
+					+ getParam("bmGrpdepth");
 				bdForm.submit();
 			}
 		}

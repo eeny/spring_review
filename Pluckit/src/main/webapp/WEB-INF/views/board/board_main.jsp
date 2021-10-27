@@ -181,7 +181,15 @@
 						<c:forEach var="bdto" items="${boardList }" varStatus="vs">
 							<tr>
 								<td>${vs.count}</td>
-								<td><a href="ReadPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${bdto.bm_num}">${bdto.bm_title }</a></td>
+								<td>
+									<c:if test="${bdto.bm_grpdepth > 0 }">
+										<c:forEach var="i" begin="0" end="${bdto.bm_grpdepth }">
+											&nbsp;&nbsp;&nbsp;&nbsp;
+										</c:forEach>
+										<img src="resources/img/answer.png" alt="answer" class="answer">&nbsp;&nbsp;
+									</c:if>
+									<a href="ReadPost.do?deptName=${empInfo.deptName }&empAuth=${empInfo.emp_auth }&pageName=${pageName}&bmNum=${bdto.bm_num}">${bdto.bm_title }</a>
+								</td>
 								<td>${bdto.bm_writer }</td>
 								<td>${bdto.bm_regdate }</td>
 								<td>${bdto.bm_hit }</td>
@@ -205,8 +213,11 @@
 										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'hwp' || fn:split(bdto.bm_file, '.')[1] eq  'txt'}">
 											<i class="fas fa-file-alt"></i>
 										</c:when>
-										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'zip'|| fn:split(bdto.bm_file, '.')[1] eq  'war'}">
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'zip' || fn:split(bdto.bm_file, '.')[1] eq  'war'}">
 											<i class="fas fa-file-archive"></i>
+										</c:when>
+										<c:when test="${fn:split(bdto.bm_file, '.')[1] eq  'exe' || fn:split(bdto.bm_file, '.')[1] eq  'html' || fn:split(bdto.bm_file, '.')[1] eq  'jar'}">
+											<i class="fas fa-file"></i>
 										</c:when>
 										<c:otherwise>
 										</c:otherwise>

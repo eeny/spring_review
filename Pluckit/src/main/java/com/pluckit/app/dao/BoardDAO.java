@@ -60,6 +60,10 @@ public class BoardDAO {
 		return sqlSession.update("board.modifyPost", map);
 	}
 	
+	public int modifyPostNotFile(HashMap<String, String> map) {
+		return sqlSession.update("board.modifyPostNotFile", map);	
+	}
+	
 	public int deletePostReply(HashMap<String, String> map) {
 		return sqlSession.delete("board.deletePostReply", map);
 	}
@@ -87,6 +91,26 @@ public class BoardDAO {
 	public int modifyReplyProc(BoardReplyDTO dto) {
 		return sqlSession.update("board.modifyReplyProc", dto);
 	}
+
+	public int getMinBmGrpOrd(HashMap<String, String> map) {
+		return sqlSession.selectOne("board.getMinBmGrpOrd", map);
+	}
+
+	public int insertFirstAnswer(HashMap<String, String> map) {
+		return sqlSession.insert("board.insertFirstAnswer", map);
+	}
+
+	public int updateOtherAnswer(HashMap<String, String> map) {
+		return sqlSession.update("board.updateOtherAnswer", map);
+	}
+
+	public int insertOtherAnswer(HashMap<String, String> map) {
+		return sqlSession.insert("board.insertOtherAnswer", map);
+	}
+
+	
+
+	
 
 	
 
