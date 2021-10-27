@@ -194,10 +194,35 @@ input::-webkit-input-placeholder {
 	padding-left: 10px;
 }
 
-.main-left li:nth-child(1) a {
+/*왼쪽 세부 메뉴 중 클릭시 색 변경*/
+a.clickBtn {
 	color: white;
 	font-weight: bold;
 	background-color: #0382c2;
+}
+
+a.clickMenu {
+	font-weight: bold;
+}
+
+.paymentmenu>li:nth-child(2)>a i {
+	padding-left: 116px;
+}
+
+.menuClose {
+	display: none;
+}
+
+.submenu li {
+	border: none;
+}
+
+.submenu li a {
+	padding-left: 30px;
+}
+
+.submenu li a i {
+	font-size: 12px;
 }
 
 /*오른쪽 본문 부분*/

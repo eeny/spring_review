@@ -22,8 +22,5 @@
 		<br><br>
 		<a href="LogoutProc.do">로그아웃</a>
 	</c:if>
-	<br><br><br>
-	
-	<a href="Employee.do">직원목록</a>
 </body>
 </html>

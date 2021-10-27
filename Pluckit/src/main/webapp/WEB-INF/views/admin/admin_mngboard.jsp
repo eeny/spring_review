@@ -116,17 +116,18 @@
 				<!-- 메인 페이지 시작 -->
 				<section class="main-left">
 					<!--왼쪽 세부 메뉴 시작-->
-					<ul>
-						<li>
-							<a href="#">게시판관리</a>
-						</li>
-						<li>
-							<a href="#">인사관리</a>
-						</li>
-						<li>
-							<a href="#">회사정보관리</a>
-						</li>
-					</ul>
+					<ul class="paymentmenu">
+                        <li><a href="#" class="clickBtn">게시판관리</a></li>
+                        <li>
+                            <a href="#">인사관리<i class="fas fa-angle-down"></i></a>
+                            <ul class="submenu menuClose">
+                                <li><a href="#" class="clickMenu"><i class="fas fa-angle-right"></i> 사원목록</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> 사원조회</a></li>
+                                <li><a href="#"><i class="fas fa-angle-right"></i> 입사처리</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">회사정보관리</a></li>
+                    </ul>
 				</section>
 				<!--왼쪽 세부 메뉴 끝-->
 
@@ -552,8 +553,8 @@
 			}
 		}
 
-		// 모달창 사라지기
 		$(function() {
+			// 모달창 나타나기 & 사라지기
 			$("#layer").click(function() {
 				$(".pop").css("display", "none");
 				$("#layer").fadeOut(100);
@@ -563,6 +564,17 @@
 				$(".pop").css("display", "none");
 				$("#layer").fadeOut(100);
 			});
+			
+			// 왼쪽 세부메뉴 토글 (클릭하면 나타나거나 사라지기)
+            $(".paymentmenu>li:nth-child(2)").click(function () {
+                $(".submenu").slideToggle();
+                if ($(".paymentmenu>li:nth-child(2)>a i").hasClass("fa-angle-down")) {
+                    $(".paymentmenu>li:nth-child(2)>a i").removeClass("fa-angle-down").addClass("fa-angle-up");
+                } else {
+                    $(".paymentmenu>li:nth-child(2)>a i").removeClass("fa-angle-up").addClass("fa-angle-down");
+                }
+            }
+            );
 		});
 
 		// 모달창 띄우기 & 수정할 게시판 데이터 가져오기
